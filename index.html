@@ -12,54 +12,161 @@
   --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.10);
   --purple:#7c3aed;--purple2:#5b21b6;--purple3:#a855f7;
   --text:#eaeaf0;--text2:#9898b0;--muted:#42425a;--dimmed:#252538;
+  --red:#ef4444;--green:#22c55e;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden}
-#app{height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
 .glow-blob{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
-#blob1{width:400px;height:300px;top:-100px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(91,33,182,0.12) 0%,transparent 70%)}
-#blob2{width:200px;height:200px;bottom:80px;right:-60px;background:radial-gradient(ellipse,rgba(168,85,247,0.06) 0%,transparent 70%)}
+#blob1{width:500px;height:300px;top:-120px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(91,33,182,0.13) 0%,transparent 70%)}
+#blob2{width:250px;height:250px;bottom:60px;right:-80px;background:radial-gradient(ellipse,rgba(168,85,247,0.07) 0%,transparent 70%)}
 
-header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--border);background:rgba(8,8,11,0.92);backdrop-filter:blur(20px);flex-shrink:0;z-index:10;position:relative}
+/* ── Screens ── */
+.screen{position:fixed;inset:0;z-index:10;display:none;align-items:center;justify-content:center;background:var(--bg)}
+.screen.active{display:flex}
+
+/* ── Auth screen ── */
+#auth-screen{flex-direction:column;padding:24px}
+.auth-card{
+  background:var(--bg2);border:1px solid var(--border);
+  border-radius:24px;padding:36px 32px;width:100%;max-width:400px;
+  position:relative;overflow:hidden;
+}
+.auth-card::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(ellipse,rgba(124,58,237,0.1) 0%,transparent 70%);pointer-events:none}
+.auth-logo{margin-bottom:20px;filter:drop-shadow(0 0 20px rgba(124,58,237,0.5));animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.auth-title{font-size:24px;font-weight:800;letter-spacing:-0.6px;margin-bottom:6px;background:linear-gradient(135deg,#fff 30%,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.auth-sub{font-size:13px;color:var(--muted);margin-bottom:28px;line-height:1.6}
+
+/* Tabs */
+.auth-tabs{display:flex;background:var(--bg3);border-radius:12px;padding:4px;margin-bottom:24px;gap:4px}
+.auth-tab{flex:1;padding:8px;border-radius:9px;border:none;background:transparent;color:var(--muted);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.auth-tab.active{background:var(--bg4);color:var(--text);box-shadow:0 1px 4px rgba(0,0,0,0.4)}
+
+/* Inputs */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:11px;font-weight:600;color:var(--muted);margin-bottom:6px;letter-spacing:0.3px;text-transform:uppercase}
+.field input{
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:12px;padding:11px 14px;
+  color:var(--text);font-size:14px;font-family:'Inter',sans-serif;
+  outline:none;transition:border-color 0.2s,box-shadow 0.2s;
+}
+.field input:focus{border-color:rgba(124,58,237,0.45);box-shadow:0 0 0 3px rgba(124,58,237,0.07)}
+.field input::placeholder{color:var(--dimmed)}
+.field .hint{font-size:11px;color:var(--muted);margin-top:5px;line-height:1.5}
+.field .hint a{color:#a78bfa;text-decoration:none}
+.field .hint a:hover{text-decoration:underline}
+
+/* Password toggle */
+.pw-wrap{position:relative}
+.pw-wrap input{padding-right:42px}
+.pw-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:16px;padding:2px;transition:color .2s}
+.pw-eye:hover{color:var(--text2)}
+
+.auth-btn{
+  width:100%;background:linear-gradient(135deg,#5b21b6,#7c3aed,#a855f7);
+  color:#fff;border:none;border-radius:12px;padding:13px;
+  font-size:14px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;
+  box-shadow:0 4px 20px rgba(124,58,237,0.4);transition:opacity .2s,transform .15s;
+  margin-top:4px;
+}
+.auth-btn:hover{opacity:.9;transform:translateY(-1px)}
+.auth-btn:disabled{opacity:.5;cursor:default;transform:none}
+
+.divider{display:flex;align-items:center;gap:12px;margin:20px 0;color:var(--muted);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* Google btn */
+.google-btn{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:12px;padding:12px;
+  color:var(--text);font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  transition:all 0.2s;
+}
+.google-btn:hover{border-color:rgba(124,58,237,0.35);background:var(--bg4)}
+.google-icon{width:18px;height:18px;flex-shrink:0}
+
+.auth-error{background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:10px 13px;font-size:12px;color:#fca5a5;margin-bottom:14px;display:none}
+.auth-error.show{display:block}
+.auth-success{background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:10px;padding:10px 13px;font-size:12px;color:#86efac;margin-bottom:14px;display:none}
+.auth-success.show{display:block}
+
+/* Key setup screen */
+#key-screen{flex-direction:column;padding:24px}
+.key-card{background:var(--bg2);border:1px solid var(--border);border-radius:24px;padding:36px 32px;width:100%;max-width:420px;position:relative;overflow:hidden}
+.key-card::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:300px;height:200px;background:radial-gradient(ellipse,rgba(124,58,237,0.1) 0%,transparent 70%);pointer-events:none}
+.key-steps{display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+.key-step{display:flex;gap:12px;align-items:flex-start}
+.step-num{width:24px;height:24px;border-radius:50%;background:rgba(124,58,237,0.15);border:1px solid rgba(124,58,237,0.3);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#a78bfa;flex-shrink:0;margin-top:1px}
+.step-txt{font-size:13px;color:var(--text2);line-height:1.6}
+.step-txt a{color:#a78bfa;text-decoration:none;font-weight:600}
+.step-txt a:hover{text-decoration:underline}
+.step-txt code{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:4px;padding:1px 6px;font-size:12px;color:#c4b5fd;font-family:monospace}
+
+/* ── App ── */
+#app-screen{flex-direction:column;position:fixed;inset:0;z-index:5}
+#app-screen.active{display:flex}
+
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--border);background:rgba(8,8,11,0.95);backdrop-filter:blur(20px);flex-shrink:0;z-index:10}
 .logo-area{display:flex;align-items:center;gap:10px}
 .logo-text{font-weight:800;font-size:16px;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff 40%,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.usage-pill{font-size:10px;font-weight:600;color:var(--muted);background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;letter-spacing:0.2px}
+.usage-pill{font-size:10px;font-weight:600;color:var(--muted);background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:20px}
 .usage-pill.warn{color:#f87171;border-color:rgba(248,113,113,0.2);background:rgba(248,113,113,0.05)}
 .usage-pill.pro{color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.05)}
 .header-right{display:flex;gap:6px;align-items:center}
 .toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif}
 .toggle-btn:hover{border-color:rgba(124,58,237,0.35);color:#7c7ccc}
 .toggle-btn.on{background:rgba(91,33,182,0.15);border-color:rgba(124,58,237,0.45);color:#a78bfa}
-.upgrade-btn{padding:6px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(91,33,182,0.2),rgba(124,58,237,0.15));border:1px solid rgba(124,58,237,0.35);color:#a78bfa;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
-.upgrade-btn:hover{background:linear-gradient(135deg,rgba(91,33,182,0.35),rgba(124,58,237,0.25))}
+.upgrade-btn{padding:6px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(91,33,182,0.2),rgba(124,58,237,0.15));border:1px solid rgba(124,58,237,0.35);color:#a78bfa;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s}
 .upgrade-btn.paid{background:transparent;border-color:var(--border);color:var(--dimmed)}
-.icon-btn{width:30px;height:30px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
-.icon-btn:hover{border-color:var(--border2);color:var(--text2)}
 
+/* User avatar menu */
+.user-menu-wrap{position:relative}
+.user-av{width:30px;height:30px;border-radius:50%;background:linear-gradient(135deg,#5b21b6,#7c3aed);border:1px solid rgba(124,58,237,0.4);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;cursor:pointer;transition:all .2s;flex-shrink:0}
+.user-av:hover{box-shadow:0 0 12px rgba(124,58,237,0.4)}
+.user-dropdown{
+  position:absolute;top:38px;right:0;
+  background:var(--bg2);border:1px solid var(--border2);
+  border-radius:14px;padding:6px;min-width:200px;
+  display:none;z-index:100;
+  box-shadow:0 8px 32px rgba(0,0,0,0.5);
+  animation:fadeUp .15s ease;
+}
+.user-dropdown.show{display:block}
+.dd-header{padding:10px 12px 8px;border-bottom:1px solid var(--border)}
+.dd-name{font-size:13px;font-weight:600;color:var(--text)}
+.dd-email{font-size:11px;color:var(--muted);margin-top:1px}
+.dd-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:9px;font-size:13px;color:var(--text2);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;font-family:'Inter',sans-serif;text-align:left}
+.dd-item:hover{background:var(--bg3);color:var(--text)}
+.dd-item.danger{color:#f87171}
+.dd-item.danger:hover{background:rgba(239,68,68,0.08)}
+.dd-sep{height:1px;background:var(--border);margin:4px 0}
+
+/* Messages */
 #messages{flex:1;overflow-y:auto;position:relative;z-index:1;scroll-behavior:smooth}
 #messages::-webkit-scrollbar{width:3px}
 #messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.04);border-radius:2px}
 
 #empty{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
-.empty-logo-wrap{margin-bottom:22px;filter:drop-shadow(0 0 28px rgba(124,58,237,0.5)) drop-shadow(0 0 8px rgba(168,85,247,0.3));animation:float 4s ease-in-out infinite}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.empty-title{font-size:26px;font-weight:800;letter-spacing:-0.7px;margin-bottom:10px;background:linear-gradient(135deg,#fff 30%,#c084fc 80%,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.empty-sub{font-size:13px;color:var(--muted);max-width:260px;line-height:1.65;margin:0 0 36px;font-weight:500}
+.empty-logo-wrap{margin-bottom:20px;filter:drop-shadow(0 0 28px rgba(124,58,237,0.5));animation:float 4s ease-in-out infinite}
+.empty-title{font-size:24px;font-weight:800;letter-spacing:-0.6px;margin-bottom:8px;background:linear-gradient(135deg,#fff 30%,#c084fc 80%,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.empty-sub{font-size:13px;color:var(--muted);max-width:260px;line-height:1.65;margin:0 0 32px}
 #suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:360px}
-.sug-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:14px;color:var(--text2);font-size:12px;font-weight:500;text-align:left;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;line-height:1.45;position:relative;overflow:hidden}
+.sug-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:13px;color:var(--text2);font-size:12px;font-weight:500;text-align:left;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;line-height:1.45}
 .sug-card:hover{border-color:rgba(124,58,237,0.35);color:var(--text);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.sug-icon{font-size:20px;margin-bottom:8px;display:block}
-.sug-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;display:block}
+.sug-icon{font-size:18px;margin-bottom:7px;display:block}
+.sug-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:3px;display:block}
 
 #thread{max-width:740px;margin:0 auto;padding:28px 16px 16px;display:none}
-.msg-row{display:flex;gap:12px;margin-bottom:24px;align-items:flex-start;animation:fadeUp 0.25s ease}
+.msg-row{display:flex;gap:12px;margin-bottom:24px;align-items:flex-start;animation:fadeUp .25s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .msg-row.user{flex-direction:row-reverse}
-.av{width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
-.av.bot{filter:drop-shadow(0 0 8px rgba(124,58,237,0.5))}
-.av.user{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);color:var(--text2);font-size:11px;font-weight:600}
+.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.av.bot{filter:drop-shadow(0 0 8px rgba(124,58,237,0.4))}
+.av.user{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;font-size:11px;font-weight:700}
 .msg-col{flex:1}
 .msg-row.user .msg-col{max-width:80%}
-.msg-name{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
+.msg-name{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:5px;letter-spacing:0.5px;text-transform:uppercase}
 .bubble{font-size:14px;line-height:1.72;color:var(--text);word-break:break-word}
 .bubble.user-b{background:var(--bg3);border:1px solid var(--border);border-radius:16px 4px 16px 16px;padding:11px 15px}
 .bubble p{margin:2px 0}
@@ -70,82 +177,204 @@ header{display:flex;align-items:center;justify-content:space-between;padding:0 1
 .bubble h3{font-size:14px;font-weight:700;margin:8px 0 3px;color:#f1f5f9}
 .bubble strong{font-weight:600;color:#f1f5f9}
 .bubble em{font-style:italic;color:var(--text2)}
-.bubble code{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:5px;padding:1px 6px;font-size:0.87em;font-family:'SF Mono','Fira Code','Consolas',monospace;color:#c4b5fd}
+.bubble code{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:5px;padding:1px 6px;font-size:.87em;font-family:'SF Mono','Fira Code',monospace;color:#c4b5fd}
 .code-wrap{margin:10px 0;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.4)}
-.code-header{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.code-header{padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05)}
 .code-lang{font-size:10px;font-weight:700;color:#7c3aed;font-family:monospace;text-transform:uppercase;letter-spacing:1px}
-.code-wrap pre{margin:0;padding:14px;font-size:13px;line-height:1.65;overflow-x:auto;color:#e2e8f0;font-family:'SF Mono','Fira Code','Consolas',monospace}
+.code-wrap pre{margin:0;padding:14px;font-size:13px;line-height:1.65;overflow-x:auto;color:#e2e8f0;font-family:'SF Mono','Fira Code',monospace}
 .bubble.warn-b{color:#fde68a}
 .bubble.err-b{color:#fca5a5}
 
 .typing-row{display:flex;gap:12px;margin-bottom:24px;align-items:flex-start}
-.typing-dots{display:flex;align-items:center;gap:5px;padding-top:5px}
+.typing-dots{display:flex;align-items:center;gap:5px;padding-top:4px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:throb 1.4s ease-in-out infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes throb{0%,60%,100%{opacity:.18;transform:scale(.65)}30%{opacity:1;transform:scale(1)}}
 
-#limit-bar{margin:0 14px 10px;flex-shrink:0;background:rgba(91,33,182,0.07);border:1px solid rgba(91,33,182,0.2);border-radius:14px;padding:11px 16px;display:none;justify-content:space-between;align-items:center}
+#limit-bar{margin:0 14px 10px;flex-shrink:0;background:rgba(91,33,182,0.07);border:1px solid rgba(91,33,182,0.2);border-radius:14px;padding:10px 16px;display:none;justify-content:space-between;align-items:center}
 #limit-bar.show{display:flex}
 .lb-t{font-size:13px;font-weight:600}
-.lb-s{font-size:11px;color:var(--muted);margin-top:2px}
-.lb-cta{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
+.lb-s{font-size:11px;color:var(--muted);margin-top:1px}
+.lb-cta{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border:none;border-radius:9px;padding:7px 13px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
 
 #input-area{padding:10px 14px 22px;border-top:1px solid var(--border);background:rgba(8,8,11,0.95);backdrop-filter:blur(20px);flex-shrink:0;z-index:5}
-#input-box{max-width:740px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:13px 13px 13px 18px;display:flex;align-items:flex-end;gap:10px;transition:border-color 0.2s,box-shadow 0.2s}
+#input-box{max-width:740px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:13px 13px 13px 18px;display:flex;align-items:flex-end;gap:10px;transition:border-color .2s,box-shadow .2s}
 #input-box:focus-within{border-color:rgba(124,58,237,0.4);box-shadow:0 0 0 3px rgba(124,58,237,0.06)}
-#web-ind{font-size:13px;margin-bottom:8px;flex-shrink:0;display:none;color:var(--purple);animation:pulse 2s ease-in-out infinite}
-@keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
+#web-ind{font-size:13px;margin-bottom:8px;flex-shrink:0;display:none;color:var(--purple)}
 #web-ind.show{display:block}
 textarea#inp{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;line-height:1.6;resize:none;font-family:'Inter',sans-serif;min-height:24px;max-height:160px}
 textarea#inp::placeholder{color:var(--dimmed)}
 textarea#inp::-webkit-scrollbar{width:0}
-#send{width:36px;height:36px;border-radius:11px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--dimmed);font-size:17px;cursor:default;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+#send{width:36px;height:36px;border-radius:11px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--dimmed);font-size:17px;cursor:default;display:flex;align-items:center;justify-content:center;transition:all .2s}
 #send.on{background:linear-gradient(135deg,#5b21b6,#7c3aed);border-color:transparent;color:#fff;cursor:pointer;box-shadow:0 2px 16px rgba(124,58,237,0.45)}
 #send.on:hover{transform:scale(1.05)}
 #input-foot{text-align:center;font-size:10px;color:var(--dimmed);margin-top:8px}
 
+/* Upgrade modal */
 #overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;z-index:500}
 #overlay.show{display:flex}
-#modal{background:var(--bg2);border:1px solid var(--border);border-top:1px solid rgba(124,58,237,0.2);border-radius:24px 24px 0 0;padding:16px 24px 48px;width:100%;max-width:460px;position:relative;overflow:hidden}
+#modal{background:var(--bg2);border:1px solid var(--border);border-top:1px solid rgba(124,58,237,0.2);border-radius:24px 24px 0 0;padding:16px 24px 48px;width:100%;max-width:460px}
 .modal-handle{width:36px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 28px}
-.modal-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin:16px 0 6px}
+.modal-title{font-size:22px;font-weight:800;letter-spacing:-.5px;margin:16px 0 6px}
 .modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65}
 .price-card{background:var(--bg3);border:1px solid rgba(124,58,237,0.18);border-radius:16px;padding:20px;margin-bottom:20px}
 .price-num{font-size:30px;font-weight:800;letter-spacing:-1.5px;margin-bottom:16px}
 .price-num span{font-size:13px;font-weight:500;color:var(--muted)}
-.feat{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:13px;color:#c4c4c4;font-weight:500}
+.feat{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:13px;color:#c4c4c4}
 .feat-ic{font-size:14px;width:20px;flex-shrink:0}
-#do-upgrade{width:100%;background:linear-gradient(135deg,#5b21b6 0%,#7c3aed 50%,#a855f7 100%);color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 24px rgba(124,58,237,0.5);font-family:'Inter',sans-serif;transition:opacity .2s}
+#do-upgrade{width:100%;background:linear-gradient(135deg,#5b21b6,#7c3aed,#a855f7);color:#fff;border:none;border-radius:14px;padding:15px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 24px rgba(124,58,237,0.5);font-family:'Inter',sans-serif;transition:opacity .2s}
 #do-upgrade:hover{opacity:.9}
 #cancel{width:100%;background:transparent;color:var(--dimmed);border:none;padding:11px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
-#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:9px 16px;font-size:12px;color:var(--text2);font-weight:500;opacity:0;pointer-events:none;transition:all 0.3s;z-index:600;white-space:nowrap}
+
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:9px 16px;font-size:12px;color:var(--text2);font-weight:500;opacity:0;pointer-events:none;transition:all .3s;z-index:600;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
-<div id="app">
-  <div class="glow-blob" id="blob1"></div>
-  <div class="glow-blob" id="blob2"></div>
+<div class="glow-blob" id="blob1"></div>
+<div class="glow-blob" id="blob2"></div>
 
+<!-- ── Auth Screen ── -->
+<div id="auth-screen" class="screen active">
+  <div class="auth-card">
+    <div class="auth-logo" id="auth-logo"></div>
+    <div class="auth-title">Welcome to Void</div>
+    <p class="auth-sub">Sign in or create an account to start chatting.</p>
+
+    <div class="auth-tabs">
+      <button class="auth-tab active" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+
+    <div class="auth-error" id="auth-error"></div>
+    <div class="auth-success" id="auth-success"></div>
+
+    <!-- Login form -->
+    <div id="login-form">
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="login-email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password"/>
+          <button class="pw-eye" onclick="togglePw('login-pw',this)">👁</button>
+        </div>
+      </div>
+      <button class="auth-btn" onclick="login()">Sign In</button>
+    </div>
+
+    <!-- Signup form -->
+    <div id="signup-form" style="display:none">
+      <div class="field">
+        <label>Name</label>
+        <input type="text" id="signup-name" placeholder="Your name" autocomplete="name"/>
+      </div>
+      <div class="field">
+        <label>Email</label>
+        <input type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"/>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="signup-pw" placeholder="Min 6 characters" autocomplete="new-password"/>
+          <button class="pw-eye" onclick="togglePw('signup-pw',this)">👁</button>
+        </div>
+      </div>
+      <button class="auth-btn" onclick="signup()">Create Account</button>
+    </div>
+
+    <div class="divider">or</div>
+
+    <button class="google-btn" onclick="googleSignIn()">
+      <svg class="google-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+      </svg>
+      Continue with Google
+    </button>
+  </div>
+</div>
+
+<!-- ── API Key Setup Screen ── -->
+<div id="key-screen" class="screen">
+  <div class="key-card">
+    <div id="key-logo" style="margin-bottom:20px;filter:drop-shadow(0 0 18px rgba(124,58,237,0.5))"></div>
+    <div style="font-size:21px;font-weight:800;letter-spacing:-.5px;margin-bottom:6px">One last step</div>
+    <p style="font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65">Connect your free Gemini API key. This means <strong style="color:var(--text)">you pay nothing</strong> — Void runs on your own key.</p>
+
+    <div class="key-steps">
+      <div class="key-step">
+        <div class="step-num">1</div>
+        <div class="step-txt">Go to <a href="https://aistudio.google.com" target="_blank">aistudio.google.com</a> and sign in with Google</div>
+      </div>
+      <div class="key-step">
+        <div class="step-num">2</div>
+        <div class="step-txt">Click <strong style="color:var(--text)">Get API key</strong> → <strong style="color:var(--text)">Create API key</strong></div>
+      </div>
+      <div class="key-step">
+        <div class="step-num">3</div>
+        <div class="step-txt">Copy your key — it starts with <code>AIza...</code></div>
+      </div>
+      <div class="key-step">
+        <div class="step-num">4</div>
+        <div class="step-txt">Paste it below and click Save</div>
+      </div>
+    </div>
+
+    <div class="auth-error" id="key-error"></div>
+
+    <div class="field">
+      <label>Your Gemini API Key</label>
+      <div class="pw-wrap">
+        <input type="password" id="key-input" placeholder="AIza..." autocomplete="off"/>
+        <button class="pw-eye" onclick="togglePw('key-input',this)">👁</button>
+      </div>
+      <div class="hint" style="font-size:11px;color:var(--muted);margin-top:6px">🔒 Stored only in your browser. Never sent to our servers.</div>
+    </div>
+
+    <button class="auth-btn" onclick="saveKey()">Save & Start Chatting →</button>
+    <button style="width:100%;background:transparent;color:var(--dimmed);border:none;padding:10px;font-size:12px;cursor:pointer;font-family:'Inter',sans-serif;margin-top:6px" onclick="logout()">← Use a different account</button>
+  </div>
+</div>
+
+<!-- ── App Screen ── -->
+<div id="app-screen" class="screen" style="display:none">
   <header>
     <div class="logo-area">
-      <div id="hdr-logo" style="filter:drop-shadow(0 0 10px rgba(124,58,237,0.55))"></div>
+      <div id="app-logo" style="filter:drop-shadow(0 0 10px rgba(124,58,237,0.5))"></div>
       <div class="logo-text">Void</div>
       <div class="usage-pill" id="usage-pill">6/6 free</div>
     </div>
     <div class="header-right">
       <button class="toggle-btn" id="web-btn" onclick="toggleWeb()">🌐 Web</button>
       <button class="upgrade-btn" id="upg-btn" onclick="openModal()">Upgrade</button>
-      <button class="icon-btn" onclick="newChat()" title="New chat">
+      <button style="width:30px;height:30px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s" onclick="newChat()" title="New chat">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg>
       </button>
+      <!-- User avatar -->
+      <div class="user-menu-wrap">
+        <div class="user-av" id="user-av" onclick="toggleDropdown()">?</div>
+        <div class="user-dropdown" id="user-dropdown">
+          <div class="dd-header">
+            <div class="dd-name" id="dd-name">User</div>
+            <div class="dd-email" id="dd-email">—</div>
+          </div>
+          <div class="dd-sep"></div>
+          <button class="dd-item" onclick="changeKey()">🔑 Change API Key</button>
+          <button class="dd-item danger" onclick="logout()">↩ Sign Out</button>
+        </div>
+      </div>
     </div>
   </header>
 
   <div id="messages">
     <div id="empty">
       <div class="empty-logo-wrap" id="empty-logo"></div>
-      <div class="empty-title">What's on your mind?</div>
+      <div class="empty-title" id="empty-title">What's on your mind?</div>
       <p class="empty-sub">Ask anything. I can reason, search the web, write code, and more.</p>
       <div id="suggestions">
         <button class="sug-card" onclick="go('What is happening in the news today?')">
@@ -154,7 +383,7 @@ textarea#inp::-webkit-scrollbar{width:0}
         <button class="sug-card" onclick="go('Write a Python function to reverse a string')">
           <span class="sug-icon">💻</span><span class="sug-label">Write code</span>Write a Python function to reverse a string
         </button>
-        <button class="sug-card" onclick="go('Help me write a professional bio about myself')">
+        <button class="sug-card" onclick="go('Help me write a professional bio')">
           <span class="sug-icon">✍️</span><span class="sug-label">Write for me</span>Help me write a professional bio
         </button>
         <button class="sug-card" onclick="go('How do black holes actually form?')">
@@ -178,38 +407,39 @@ textarea#inp::-webkit-scrollbar{width:0}
         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
       </button>
     </div>
-    <div id="input-foot">Void may make mistakes · Don't share sensitive info</div>
+    <div id="input-foot">Void uses your own API key · Responses not stored on our servers</div>
   </div>
-
-  <div id="overlay" onclick="overlayClick(event)">
-    <div id="modal">
-      <div class="modal-handle"></div>
-      <div id="modal-logo" style="filter:drop-shadow(0 0 24px rgba(124,58,237,0.55))"></div>
-      <div class="modal-title">Void Pro</div>
-      <p class="modal-sub">Remove limits and unlock the full experience.</p>
-      <div class="price-card">
-        <div class="price-num">$9.99<span> / month</span></div>
-        <div class="feat"><span class="feat-ic">✦</span>Unlimited messages every day</div>
-        <div class="feat"><span class="feat-ic">🌐</span>Web search on every message</div>
-        <div class="feat"><span class="feat-ic">⚡</span>Fastest response speed</div>
-        <div class="feat"><span class="feat-ic">🔒</span>No ads · Fully private</div>
-        <div class="feat"><span class="feat-ic">🚀</span>Early access to new features</div>
-      </div>
-      <button id="do-upgrade" onclick="upgrade()">Upgrade to Pro →</button>
-      <button id="cancel" onclick="closeModal()">Maybe later</button>
-    </div>
-  </div>
-
-  <div id="toast"></div>
 </div>
 
-<script>
-// ─── Paste your Gemini API key here ──────────────────────────
-const API_KEY = 'AQ.Ab8RN6J1oRubPiVjCGJ_YNVBSHZlHYScRKwD1QHn1UXXNhEhmQ';
-// ─────────────────────────────────────────────────────────────
+<!-- Upgrade modal -->
+<div id="overlay" onclick="overlayClick(event)">
+  <div id="modal">
+    <div class="modal-handle"></div>
+    <div id="modal-logo" style="filter:drop-shadow(0 0 24px rgba(124,58,237,0.5))"></div>
+    <div class="modal-title">Void Pro</div>
+    <p class="modal-sub">Remove limits and unlock the full experience.</p>
+    <div class="price-card">
+      <div class="price-num">$9.99<span> / month</span></div>
+      <div class="feat"><span class="feat-ic">✦</span>Unlimited messages every day</div>
+      <div class="feat"><span class="feat-ic">🌐</span>Web search on every message</div>
+      <div class="feat"><span class="feat-ic">⚡</span>Fastest response speed</div>
+      <div class="feat"><span class="feat-ic">🔒</span>No ads · Fully private</div>
+      <div class="feat"><span class="feat-ic">🚀</span>Early access to new features</div>
+    </div>
+    <button id="do-upgrade" onclick="upgrade()">Upgrade to Pro →</button>
+    <button id="cancel" onclick="closeModal()">Maybe later</button>
+  </div>
+</div>
 
+<div id="toast"></div>
+
+<script>
+// ─── Storage keys ─────────────────────────────────────────────
+const SK_USERS   = 'void_users';
+const SK_SESSION = 'void_session';
+const SK_USAGE   = 'void_usage';
 const FREE_LIMIT = 6;
-const SK = 'voidai_gemini_v1';
+
 const BLOCKED = [
   /how\s+to\s+(make|build|create|synthesize).*(bomb|weapon|explosive|poison|meth|fentanyl)/i,
   /(kill|harm|murder|attack)\s+(someone|myself|yourself|people)/i,
@@ -217,57 +447,220 @@ const BLOCKED = [
   /child\s+(porn|sexual|nude|exploit|abuse)/i,
 ];
 
-let msgs=[], webOn=false, busy=false;
+// ─── State ────────────────────────────────────────────────────
+let msgs=[], webOn=false, busy=false, currentUser=null;
 
-function getU(){try{return JSON.parse(localStorage.getItem(SK))||{c:0,d:new Date().toDateString(),pro:false}}catch{return{c:0,d:new Date().toDateString(),pro:false}}}
-function setU(u){try{localStorage.setItem(SK,JSON.stringify(u))}catch{}}
-function rem(){const u=getU();if(u.pro)return Infinity;if(u.d!==new Date().toDateString())return FREE_LIMIT;return Math.max(0,FREE_LIMIT-u.c)}
+// ─── Helpers ──────────────────────────────────────────────────
+function store(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch{}}
+function load(k){try{return JSON.parse(localStorage.getItem(k))||null}catch{return null}}
 function isSafe(t){return!BLOCKED.some(r=>r.test(t))}
+function showToast(msg,dur=2200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
+function scrollBot(){const m=document.getElementById('messages');m.scrollTop=m.scrollHeight}
 
+// ─── SVG Logo ─────────────────────────────────────────────────
 function logo(s,id=''){
   return`<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <radialGradient id="b${id}" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#000"/><stop offset="35%" stop-color="#0a0014"/>
-      <stop offset="58%" stop-color="#2d0a5e"/><stop offset="75%" stop-color="#5b21b6" stop-opacity=".95"/>
-      <stop offset="90%" stop-color="#7c3aed" stop-opacity=".45"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="g${id}" cx="50%" cy="50%" r="50%">
-      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0"/><stop offset="100%" stop-color="#a855f7" stop-opacity=".3"/>
-    </radialGradient>
-    <filter id="f${id}"><feGaussianBlur stdDeviation="1.8"/></filter>
-    <filter id="f2${id}"><feGaussianBlur stdDeviation="3"/></filter>
-  </defs>
-  <circle cx="50" cy="50" r="49" fill="url(#g${id})"/>
-  <ellipse cx="50" cy="50" rx="47" ry="12" fill="none" stroke="#6d28d9" stroke-width="9" opacity=".12" filter="url(#f2${id})"/>
-  <ellipse cx="50" cy="50" rx="44" ry="9.5" fill="none" stroke="#7c3aed" stroke-width="5" opacity=".22" filter="url(#f${id})"/>
-  <ellipse cx="50" cy="50" rx="40" ry="7" fill="none" stroke="#9333ea" stroke-width="3" opacity=".38" filter="url(#f${id})"/>
-  <ellipse cx="50" cy="50" rx="36" ry="5" fill="none" stroke="#c084fc" stroke-width="1.5" opacity=".55"/>
-  <circle cx="50" cy="50" r="37" fill="url(#b${id})"/>
-  <circle cx="50" cy="50" r="21" fill="#000"/>
-  <circle cx="50" cy="50" r="21" fill="none" stroke="#7c3aed" stroke-width="1.8" opacity=".85" filter="url(#f${id})"/>
-  <circle cx="50" cy="50" r="23.5" fill="none" stroke="#c084fc" stroke-width=".6" opacity=".28"/>
-  <circle cx="29" cy="44" r="1.3" fill="#c084fc" opacity=".65"/>
-  <circle cx="71" cy="56" r="1" fill="#a855f7" opacity=".5"/>
+  <!-- Outer orbital ring -->
+  <ellipse cx="50" cy="50" rx="34" ry="9" fill="none" stroke="#fff" stroke-width="1.1" stroke-linecap="round" transform="rotate(-25 50 50)"/>
+  <!-- Small lower arc -->
+  <path d="M 22 57 Q 32 64 45 61" fill="none" stroke="#fff" stroke-width="0.8" stroke-linecap="round"/>
+  <!-- Left crescent body -->
+  <path d="M 42 25 C 27 27 20 38 22 50 C 24 61 33 68 46 70 C 37 66 31 58 31 50 C 30 40 36 31 45 29 Z" fill="#fff"/>
+  <!-- Right swirl body -->
+  <path d="M 45 29 C 54 27 63 29 69 35 C 75 41 77 49 75 57 C 73 64 67 69 59 70 C 66 67 71 61 72 55 C 74 47 72 39 67 34 C 62 29 54 28 47 30 Z" fill="#fff"/>
+  <!-- Inner spiral cutout right -->
+  <path d="M 56 33 C 63 36 67 43 67 50 C 67 57 63 63 57 65 C 62 62 65 57 65 50 C 65 43 62 37 57 34 Z" fill="#000"/>
+  <!-- Center connector -->
+  <path d="M 42 38 C 45 35 51 35 55 38 C 59 41 60 46 57 50 C 54 54 48 55 44 53 C 40 51 38 46 39 42 C 40 39 41 38 43 37 Z" fill="#fff"/>
+  <!-- Dark center hole -->
+  <ellipse cx="49" cy="46" rx="6" ry="5.5" fill="#000"/>
+  <!-- Star -->
+  <polygon points="49,39 50.5,43.5 55,43.5 51.5,46 52.8,51 49,48.2 45.2,51 46.5,46 43,43.5 47.5,43.5" fill="#fff"/>
+  <!-- Trailing tip upper left -->
+  <path d="M 42 25 C 44 22 48 22 50 24" fill="none" stroke="#fff" stroke-width="1.2" stroke-linecap="round"/>
+  <!-- Trailing tip lower right -->
+  <path d="M 59 70 C 62 71 65 69 66 67" fill="none" stroke="#fff" stroke-width="1" stroke-linecap="round"/>
   </svg>`;
 }
 
-document.getElementById('hdr-logo').innerHTML=logo(32,'h');
-document.getElementById('empty-logo').innerHTML=logo(72,'e');
-document.getElementById('modal-logo').innerHTML=logo(52,'m');
+// Inject logos
+['auth-logo','key-logo','app-logo','empty-logo','modal-logo'].forEach((id,i)=>{
+  const sizes=[56,44,32,68,52];
+  const el=document.getElementById(id);
+  if(el)el.innerHTML=logo(sizes[i],id);
+});
 
-function updateUI(){
-  const u=getU(),r=rem();
-  const pill=document.getElementById('usage-pill');
-  const upgBtn=document.getElementById('upg-btn');
-  if(u.pro){pill.textContent='Pro ∞';pill.className='usage-pill pro';upgBtn.textContent='✓ Pro';upgBtn.className='upgrade-btn paid'}
-  else{pill.textContent=`${r}/${FREE_LIMIT} free`;pill.className='usage-pill'+(r<=2?' warn':'');upgBtn.textContent='Upgrade';upgBtn.className='upgrade-btn'}
-  document.getElementById('limit-bar').classList.toggle('show',!u.pro&&r<=0);
-  const ta=document.getElementById('inp');
-  ta.placeholder=!u.pro&&r<=0?'Upgrade to keep chatting…':'Message Void…';
-  ta.disabled=!u.pro&&r<=0;
+// ─── Screen management ─────────────────────────────────────────
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='none'});
+  const el=document.getElementById(id);
+  if(el){el.style.display='flex';el.classList.add('active')}
 }
 
+// ─── Auth: fake local user store ──────────────────────────────
+function getUsers(){return load(SK_USERS)||{}}
+function saveUsers(u){store(SK_USERS,u)}
+function hashPw(pw){
+  // Simple deterministic hash — not cryptographic, but fine for a demo
+  let h=0;for(let i=0;i<pw.length;i++){h=((h<<5)-h)+pw.charCodeAt(i);h|=0}
+  return h.toString(36);
+}
+
+function showAuthErr(msg){const el=document.getElementById('auth-error');el.textContent=msg;el.classList.add('show');document.getElementById('auth-success').classList.remove('show')}
+function showAuthOk(msg){const el=document.getElementById('auth-success');el.textContent=msg;el.classList.add('show');document.getElementById('auth-error').classList.remove('show')}
+function clearAuthMsg(){document.getElementById('auth-error').classList.remove('show');document.getElementById('auth-success').classList.remove('show')}
+
+function switchTab(tab){
+  clearAuthMsg();
+  document.querySelectorAll('.auth-tab').forEach((t,i)=>t.classList.toggle('active',(tab==='login'&&i===0)||(tab==='signup'&&i===1)));
+  document.getElementById('login-form').style.display=tab==='login'?'block':'none';
+  document.getElementById('signup-form').style.display=tab==='signup'?'block':'none';
+}
+
+function togglePw(id,btn){
+  const inp=document.getElementById(id);
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈'}
+  else{inp.type='password';btn.textContent='👁'}
+}
+
+function login(){
+  const email=document.getElementById('login-email').value.trim().toLowerCase();
+  const pw=document.getElementById('login-pw').value;
+  if(!email||!pw){showAuthErr('Please fill in all fields.');return}
+  const users=getUsers();
+  const user=users[email];
+  if(!user){showAuthErr('No account found. Please sign up.');return}
+  if(user.pw!==hashPw(pw)){showAuthErr('Incorrect password.');return}
+  startSession(user);
+}
+
+function signup(){
+  const name=document.getElementById('signup-name').value.trim();
+  const email=document.getElementById('signup-email').value.trim().toLowerCase();
+  const pw=document.getElementById('signup-pw').value;
+  if(!name||!email||!pw){showAuthErr('Please fill in all fields.');return}
+  if(!email.includes('@')){showAuthErr('Please enter a valid email.');return}
+  if(pw.length<6){showAuthErr('Password must be at least 6 characters.');return}
+  const users=getUsers();
+  if(users[email]){showAuthErr('An account with this email already exists.');return}
+  const user={name,email,pw:hashPw(pw),apiKey:null,pro:false,joined:Date.now()};
+  users[email]=user;
+  saveUsers(users);
+  showAuthOk('Account created! Setting up your profile…');
+  setTimeout(()=>startSession(user),800);
+}
+
+function googleSignIn(){
+  // Simulated Google sign-in — creates/loads a demo Google account
+  const email='google.user@gmail.com';
+  const users=getUsers();
+  if(!users[email]){
+    users[email]={name:'Google User',email,pw:'',apiKey:null,pro:false,joined:Date.now(),google:true};
+    saveUsers(users);
+  }
+  startSession(users[email]);
+}
+
+function startSession(user){
+  store(SK_SESSION,{email:user.email});
+  currentUser=user;
+  if(!user.apiKey){showScreen('key-screen')}
+  else{enterApp()}
+}
+
+function saveKey(){
+  const key=document.getElementById('key-input').value.trim();
+  const errEl=document.getElementById('key-error');
+  errEl.classList.remove('show');
+  if(!key){errEl.textContent='Please paste your API key.';errEl.classList.add('show');return}
+  if(!key.startsWith('AIza')){errEl.textContent='That doesn\'t look right. Gemini keys start with "AIza..."';errEl.classList.add('show');return}
+  // Save key to user record
+  const users=getUsers();
+  currentUser.apiKey=key;
+  users[currentUser.email]=currentUser;
+  saveUsers(users);
+  enterApp();
+}
+
+function changeKey(){
+  closeDropdown();
+  document.getElementById('key-input').value=currentUser.apiKey||'';
+  showScreen('key-screen');
+}
+
+function logout(){
+  localStorage.removeItem(SK_SESSION);
+  currentUser=null;msgs=[];
+  document.getElementById('thread').innerHTML='';
+  document.getElementById('thread').style.display='none';
+  document.getElementById('empty').style.display='flex';
+  showScreen('auth-screen');
+  clearAuthMsg();
+}
+
+function enterApp(){
+  // Update header UI
+  const initials=currentUser.name?currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'?';
+  document.getElementById('user-av').textContent=initials;
+  document.getElementById('dd-name').textContent=currentUser.name||'User';
+  document.getElementById('dd-email').textContent=currentUser.email||'';
+  const firstName=currentUser.name?currentUser.name.split(' ')[0]:'there';
+  document.getElementById('empty-title').textContent=`Hey ${firstName}, what's on your mind?`;
+  updateUsageUI();
+  showScreen('app-screen');
+}
+
+// Restore session on load
+(function(){
+  const sess=load(SK_SESSION);
+  if(sess&&sess.email){
+    const users=getUsers();
+    const user=users[sess.email];
+    if(user){currentUser=user;if(!user.apiKey){showScreen('key-screen')}else{enterApp()}}
+  }
+})();
+
+// ─── Dropdown ─────────────────────────────────────────────────
+function toggleDropdown(){document.getElementById('user-dropdown').classList.toggle('show')}
+function closeDropdown(){document.getElementById('user-dropdown').classList.remove('show')}
+document.addEventListener('click',e=>{if(!e.target.closest('.user-menu-wrap'))closeDropdown()});
+
+// ─── Usage ────────────────────────────────────────────────────
+function getUsage(){
+  if(!currentUser)return{c:0,d:new Date().toDateString()};
+  const all=load(SK_USAGE)||{};
+  return all[currentUser.email]||{c:0,d:new Date().toDateString()};
+}
+function setUsage(u){
+  if(!currentUser)return;
+  const all=load(SK_USAGE)||{};
+  all[currentUser.email]=u;store(SK_USAGE,all);
+}
+function getRemaining(){
+  if(!currentUser)return 0;
+  if(currentUser.pro)return Infinity;
+  const u=getUsage();
+  if(u.d!==new Date().toDateString())return FREE_LIMIT;
+  return Math.max(0,FREE_LIMIT-u.c);
+}
+function updateUsageUI(){
+  const r=getRemaining();
+  const pill=document.getElementById('usage-pill');
+  const upgBtn=document.getElementById('upg-btn');
+  if(currentUser&&currentUser.pro){
+    pill.textContent='Pro ∞';pill.className='usage-pill pro';
+    upgBtn.textContent='✓ Pro';upgBtn.className='upgrade-btn paid';
+  } else {
+    pill.textContent=`${r}/${FREE_LIMIT} free`;
+    pill.className='usage-pill'+(r<=2?' warn':'');
+    upgBtn.textContent='Upgrade';upgBtn.className='upgrade-btn';
+  }
+  document.getElementById('limit-bar').classList.toggle('show',!currentUser?.pro&&r<=0);
+  document.getElementById('inp').placeholder=!currentUser?.pro&&r<=0?'Upgrade to keep chatting…':'Message Void…';
+  document.getElementById('inp').disabled=!currentUser?.pro&&r<=0;
+}
+
+// ─── Web toggle ───────────────────────────────────────────────
 function toggleWeb(){
   webOn=!webOn;
   document.getElementById('web-btn').classList.toggle('on',webOn);
@@ -275,14 +668,14 @@ function toggleWeb(){
   showToast(webOn?'Web search on':'Web search off');
 }
 
+// ─── Input ────────────────────────────────────────────────────
 function onType(el){
   el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';
   document.getElementById('send').className=el.value.trim()&&!busy?'on':'';
 }
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-function scrollBot(){const m=document.getElementById('messages');m.scrollTop=m.scrollHeight}
-function showToast(msg,dur=2000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
 
+// ─── Markdown ─────────────────────────────────────────────────
 function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
 function inline(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*(.+?)\*/g,'<em>$1</em>')}
 function md(text){
@@ -305,12 +698,14 @@ function md(text){
   return html;
 }
 
+// ─── Message rendering ────────────────────────────────────────
 function addMsg(role,content,cls=''){
   document.getElementById('empty').style.display='none';
   const th=document.getElementById('thread');th.style.display='block';
   const row=document.createElement('div');row.className=`msg-row${role==='user'?' user':''}`;
   const av=document.createElement('div');av.className=`av ${role==='user'?'user':'bot'}`;
-  av.innerHTML=role==='user'?'You':logo(30,'t'+Date.now());
+  if(role==='assistant'){av.innerHTML=logo(28,'m'+Date.now())}
+  else{const initials=currentUser?.name?currentUser.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'U';av.textContent=initials}
   const col=document.createElement('div');col.className='msg-col';
   if(role==='assistant'){const n=document.createElement('div');n.className='msg-name';n.textContent='VOID';col.appendChild(n)}
   const bub=document.createElement('div');
@@ -323,102 +718,89 @@ function addMsg(role,content,cls=''){
 function showTyping(){
   const th=document.getElementById('thread');
   const div=document.createElement('div');div.id='typing';div.className='typing-row';
-  div.innerHTML=`<div class="av bot">${logo(30,'ty')}</div><div class="msg-col"><div class="msg-name">VOID</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  div.innerHTML=`<div class="av bot">${logo(28,'ty')}</div><div class="msg-col"><div class="msg-name">VOID</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   th.appendChild(div);scrollBot();
 }
 function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
 
-// ─── Gemini API call ──────────────────────────────────────────
-async function callGemini(history, userText) {
-  // Build contents array for Gemini
-  const contents = history.map(m => ({
-    role: m.role === 'assistant' ? 'model' : 'user',
-    parts: [{ text: m.content }]
-  }));
-  contents.push({ role: 'user', parts: [{ text: userText }] });
-
-  const model = webOn ? 'gemini-2.0-flash' : 'gemini-2.0-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
-
-  const body = {
+// ─── Gemini API ───────────────────────────────────────────────
+async function callGemini(history,userText){
+  const key=currentUser?.apiKey?.trim();
+  if(!key||key.length<20)throw new Error('NO_KEY');
+  const contents=history.map(m=>({role:m.role==='assistant'?'model':'user',parts:[{text:m.content}]}));
+  contents.push({role:'user',parts:[{text:userText}]});
+  const url=`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`;
+  const body={
     contents,
-    systemInstruction: {
-      parts: [{ text: `You are Void, a helpful, safe, and intelligent AI assistant. Be clear, accurate, and concise. Use markdown formatting when helpful — headers, bullets, code blocks. Never assist with illegal activity, violence, self-harm, weapons, or harmful content. If someone seems in crisis, respond with empathy and direct them to call or text 988.` }]
-    },
-    generationConfig: { maxOutputTokens: 1500, temperature: 0.7 },
-    safetySettings: [
-      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
-      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+    systemInstruction:{parts:[{text:'You are Void, a helpful, safe, and intelligent AI assistant. Be clear, accurate, and concise. Use markdown when helpful. Never assist with illegal activity, violence, self-harm, or harmful content.'}]},
+    generationConfig:{maxOutputTokens:1500,temperature:0.7},
+    safetySettings:[
+      {category:'HARM_CATEGORY_HARASSMENT',threshold:'BLOCK_MEDIUM_AND_ABOVE'},
+      {category:'HARM_CATEGORY_HATE_SPEECH',threshold:'BLOCK_MEDIUM_AND_ABOVE'},
+      {category:'HARM_CATEGORY_SEXUALLY_EXPLICIT',threshold:'BLOCK_MEDIUM_AND_ABOVE'},
+      {category:'HARM_CATEGORY_DANGEROUS_CONTENT',threshold:'BLOCK_MEDIUM_AND_ABOVE'},
     ]
   };
-
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body)
-  });
-
-  const data = await res.json();
-  if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
-
-  const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!reply) throw new Error('No response from Gemini');
+  const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const data=await res.json();
+  if(!res.ok){
+    const msg=data?.error?.message||'';
+    if(res.status===400||res.status===403)throw new Error('BAD_KEY');
+    throw new Error(msg||`HTTP ${res.status}`);
+  }
+  const reply=data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if(!reply)throw new Error('Empty response. Please try again.');
   return reply;
 }
 
+// ─── Send ─────────────────────────────────────────────────────
 async function send(override){
   const ta=document.getElementById('inp');
   const text=(override||ta.value).trim();
-  if(!text||busy)return;
-
-  const u=getU(),r=rem();
-  if(!u.pro&&r<=0){openModal();return}
-
+  if(!text||busy||!currentUser)return;
+  const r=getRemaining();
+  if(!currentUser.pro&&r<=0){openModal();return}
   if(!isSafe(text)){
     addMsg('user',text);
     addMsg('assistant',"I can't help with that. If you're going through something difficult, please reach out — call or text **988** anytime.",'warn-b');
     ta.value='';ta.style.height='auto';document.getElementById('send').className='';return;
   }
-
-  if(API_KEY==='YOUR_GEMINI_KEY_HERE'){
-    addMsg('user',text);
-    addMsg('assistant','⚠️ **No API key set.**\n\nTo fix this:\n1. Go to **aistudio.google.com**\n2. Click **Get API key** (it\'s free)\n3. Open this HTML file in Notepad\n4. Replace `YOUR_GEMINI_KEY_HERE` with your key\n5. Save and re-upload','warn-b');
-    ta.value='';ta.style.height='auto';document.getElementById('send').className='';return;
-  }
-
   msgs.push({role:'user',content:text});
   addMsg('user',text);
   ta.value='';ta.style.height='auto';document.getElementById('send').className='';
   busy=true;showTyping();
-
-  if(!u.pro){
+  if(!currentUser.pro){
     const today=new Date().toDateString();
-    setU({c:(u.d===today?u.c:0)+1,d:today,pro:false});updateUI();
+    const u=getUsage();
+    setUsage({c:(u.d===today?u.c:0)+1,d:today});
+    updateUsageUI();
   }
-
   try{
-    const reply = await callGemini(msgs.slice(0,-1), text);
-    rmTyping();
-    msgs.push({role:'assistant',content:reply});
-    addMsg('assistant',reply);
+    const reply=await callGemini(msgs.slice(0,-1),text);
+    rmTyping();msgs.push({role:'assistant',content:reply});addMsg('assistant',reply);
   } catch(err){
     rmTyping();
-    const e=`**Error:** ${err.message}`;
-    msgs.push({role:'assistant',content:e});
-    addMsg('assistant',e,'err-b');
+    let errMsg;
+    if(err.message==='NO_KEY'){errMsg='⚠️ No API key found. Click your avatar → **Change API Key** to add one.'}
+    else if(err.message==='BAD_KEY'){errMsg='⚠️ **API key rejected.** Click your avatar → **Change API Key** and paste a fresh key from aistudio.google.com'}
+    else{errMsg=`**Error:** ${err.message}`}
+    msgs.push({role:'assistant',content:errMsg});addMsg('assistant',errMsg,'err-b');
   } finally{busy=false}
 }
 
 function go(t){send(t)}
 function newChat(){msgs=[];document.getElementById('thread').innerHTML='';document.getElementById('thread').style.display='none';document.getElementById('empty').style.display='flex'}
+
+// ─── Upgrade modal ────────────────────────────────────────────
 function openModal(){document.getElementById('overlay').classList.add('show')}
 function closeModal(){document.getElementById('overlay').classList.remove('show')}
 function overlayClick(e){if(e.target===e.currentTarget)closeModal()}
-function upgrade(){const u=getU();setU({...u,pro:true});updateUI();closeModal();showToast('Welcome to Pro! ✦')}
-
-(function(){const u=getU(),today=new Date().toDateString();if(!u.pro&&u.d!==today)setU({c:0,d:today,pro:false});updateUI()})();
+function upgrade(){
+  if(!currentUser)return;
+  const users=getUsers();currentUser.pro=true;users[currentUser.email]=currentUser;saveUsers(users);
+  updateUsageUI();closeModal();showToast('Welcome to Pro! ✦');
+}
 </script>
 </body>
 </html>
+
