@@ -4,163 +4,64 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Void AI</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --bg:#08080b;
-  --bg2:#0e0e14;
-  --bg3:#13131c;
-  --bg4:#1a1a27;
-  --border:rgba(255,255,255,0.06);
-  --border2:rgba(255,255,255,0.10);
-  --purple:#7c3aed;
-  --purple2:#5b21b6;
-  --purple3:#a855f7;
-  --text:#eaeaf0;
-  --text2:#9898b0;
-  --muted:#42425a;
-  --dimmed:#252538;
+  --bg:#08080b;--bg2:#0e0e14;--bg3:#13131c;--bg4:#1a1a27;
+  --border:rgba(255,255,255,0.06);--border2:rgba(255,255,255,0.10);
+  --purple:#7c3aed;--purple2:#5b21b6;--purple3:#a855f7;
+  --text:#eaeaf0;--text2:#9898b0;--muted:#42425a;--dimmed:#252538;
 }
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow:hidden}
-
-/* Noise texture overlay */
-body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");opacity:0.4;pointer-events:none;z-index:0}
-
 #app{height:100vh;display:flex;flex-direction:column;overflow:hidden;position:relative;z-index:1}
-
-/* Ambient glow blobs */
 .glow-blob{position:fixed;border-radius:50%;filter:blur(80px);pointer-events:none;z-index:0}
 #blob1{width:400px;height:300px;top:-100px;left:50%;transform:translateX(-50%);background:radial-gradient(ellipse,rgba(91,33,182,0.12) 0%,transparent 70%)}
 #blob2{width:200px;height:200px;bottom:80px;right:-60px;background:radial-gradient(ellipse,rgba(168,85,247,0.06) 0%,transparent 70%)}
 
-/* ── Header ── */
-header{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;height:56px;
-  border-bottom:1px solid var(--border);
-  background:rgba(8,8,11,0.92);
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
-  flex-shrink:0;z-index:10;position:relative;
-}
+header{display:flex;align-items:center;justify-content:space-between;padding:0 16px;height:56px;border-bottom:1px solid var(--border);background:rgba(8,8,11,0.92);backdrop-filter:blur(20px);flex-shrink:0;z-index:10;position:relative}
 .logo-area{display:flex;align-items:center;gap:10px}
-.logo-text{font-weight:800;font-size:16px;letter-spacing:-0.5px;
-  background:linear-gradient(135deg,#fff 40%,#a78bfa);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.usage-pill{font-size:10px;font-weight:600;color:var(--muted);
-  background:var(--bg3);border:1px solid var(--border);
-  padding:2px 8px;border-radius:20px;letter-spacing:0.2px}
+.logo-text{font-weight:800;font-size:16px;letter-spacing:-0.5px;background:linear-gradient(135deg,#fff 40%,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.usage-pill{font-size:10px;font-weight:600;color:var(--muted);background:var(--bg3);border:1px solid var(--border);padding:2px 8px;border-radius:20px;letter-spacing:0.2px}
 .usage-pill.warn{color:#f87171;border-color:rgba(248,113,113,0.2);background:rgba(248,113,113,0.05)}
 .usage-pill.pro{color:#a78bfa;border-color:rgba(167,139,250,0.2);background:rgba(167,139,250,0.05)}
-
 .header-right{display:flex;gap:6px;align-items:center}
-
-/* Toggle pill button */
-.toggle-btn{
-  display:flex;align-items:center;gap:5px;
-  padding:5px 12px;border-radius:20px;
-  background:transparent;border:1px solid var(--border);
-  color:var(--muted);font-size:11px;font-weight:600;
-  cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;
-  letter-spacing:0.1px;
-}
+.toggle-btn{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:20px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif}
 .toggle-btn:hover{border-color:rgba(124,58,237,0.35);color:#7c7ccc}
 .toggle-btn.on{background:rgba(91,33,182,0.15);border-color:rgba(124,58,237,0.45);color:#a78bfa}
-
-.upgrade-btn{
-  padding:6px 14px;border-radius:20px;
-  background:linear-gradient(135deg,rgba(91,33,182,0.2),rgba(124,58,237,0.15));
-  border:1px solid rgba(124,58,237,0.35);
-  color:#a78bfa;font-size:11px;font-weight:700;
-  cursor:pointer;font-family:'Inter',sans-serif;
-  transition:all 0.2s;letter-spacing:0.1px;
-}
-.upgrade-btn:hover{background:linear-gradient(135deg,rgba(91,33,182,0.35),rgba(124,58,237,0.25));border-color:rgba(124,58,237,0.6)}
+.upgrade-btn{padding:6px 14px;border-radius:20px;background:linear-gradient(135deg,rgba(91,33,182,0.2),rgba(124,58,237,0.15));border:1px solid rgba(124,58,237,0.35);color:#a78bfa;font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all 0.2s}
+.upgrade-btn:hover{background:linear-gradient(135deg,rgba(91,33,182,0.35),rgba(124,58,237,0.25))}
 .upgrade-btn.paid{background:transparent;border-color:var(--border);color:var(--dimmed)}
-
-.icon-btn{
-  width:30px;height:30px;border-radius:8px;
-  background:transparent;border:1px solid var(--border);
-  color:var(--muted);font-size:14px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s;
-}
+.icon-btn{width:30px;height:30px;border-radius:8px;background:transparent;border:1px solid var(--border);color:var(--muted);font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
 .icon-btn:hover{border-color:var(--border2);color:var(--text2)}
 
-/* ── Messages area ── */
 #messages{flex:1;overflow-y:auto;position:relative;z-index:1;scroll-behavior:smooth}
 #messages::-webkit-scrollbar{width:3px}
 #messages::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.04);border-radius:2px}
 
-/* ── Empty state ── */
-#empty{
-  min-height:100%;display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  padding:40px 20px;text-align:center;
-}
-.empty-logo-wrap{
-  margin-bottom:22px;
-  filter:drop-shadow(0 0 28px rgba(124,58,237,0.5)) drop-shadow(0 0 8px rgba(168,85,247,0.3));
-  animation:float 4s ease-in-out infinite;
-}
+#empty{min-height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 20px;text-align:center}
+.empty-logo-wrap{margin-bottom:22px;filter:drop-shadow(0 0 28px rgba(124,58,237,0.5)) drop-shadow(0 0 8px rgba(168,85,247,0.3));animation:float 4s ease-in-out infinite}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
-.empty-title{
-  font-size:26px;font-weight:800;letter-spacing:-0.7px;margin-bottom:10px;
-  background:linear-gradient(135deg,#fff 30%,#c084fc 80%,#7c3aed);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-}
+.empty-title{font-size:26px;font-weight:800;letter-spacing:-0.7px;margin-bottom:10px;background:linear-gradient(135deg,#fff 30%,#c084fc 80%,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .empty-sub{font-size:13px;color:var(--muted);max-width:260px;line-height:1.65;margin:0 0 36px;font-weight:500}
-
-/* Suggestion cards */
 #suggestions{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%;max-width:360px}
-.sug-card{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:16px;padding:14px;
-  color:var(--text2);font-size:12px;font-weight:500;
-  text-align:left;cursor:pointer;
-  transition:all 0.2s;font-family:'Inter',sans-serif;
-  line-height:1.45;position:relative;overflow:hidden;
-}
-.sug-card::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(135deg,rgba(124,58,237,0.06),transparent);
-  opacity:0;transition:opacity 0.2s;
-}
+.sug-card{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:14px;color:var(--text2);font-size:12px;font-weight:500;text-align:left;cursor:pointer;transition:all 0.2s;font-family:'Inter',sans-serif;line-height:1.45;position:relative;overflow:hidden}
 .sug-card:hover{border-color:rgba(124,58,237,0.35);color:var(--text);transform:translateY(-1px);box-shadow:0 4px 20px rgba(0,0,0,0.3)}
-.sug-card:hover::before{opacity:1}
 .sug-icon{font-size:20px;margin-bottom:8px;display:block}
 .sug-label{font-size:9px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.8px;margin-bottom:4px;display:block}
 
-/* ── Thread ── */
 #thread{max-width:740px;margin:0 auto;padding:28px 16px 16px;display:none}
-
 .msg-row{display:flex;gap:12px;margin-bottom:24px;align-items:flex-start;animation:fadeUp 0.25s ease}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .msg-row.user{flex-direction:row-reverse}
-
 .av{width:30px;height:30px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
 .av.bot{filter:drop-shadow(0 0 8px rgba(124,58,237,0.5))}
-.av.user{
-  background:linear-gradient(135deg,var(--bg3),var(--bg4));
-  border:1px solid var(--border2);
-  color:var(--text2);font-size:11px;font-weight:600;
-}
-
+.av.user{background:linear-gradient(135deg,var(--bg3),var(--bg4));border:1px solid var(--border2);color:var(--text2);font-size:11px;font-weight:600}
 .msg-col{flex:1}
 .msg-row.user .msg-col{max-width:80%}
-
 .msg-name{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase}
-
 .bubble{font-size:14px;line-height:1.72;color:var(--text);word-break:break-word}
-.bubble.user-b{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:16px 4px 16px 16px;
-  padding:11px 15px;
-}
+.bubble.user-b{background:var(--bg3);border:1px solid var(--border);border-radius:16px 4px 16px 16px;padding:11px 15px}
 .bubble p{margin:2px 0}
 .bubble ul,.bubble ol{margin:6px 0;padding-left:22px;display:flex;flex-direction:column;gap:4px}
 .bubble li{font-size:14px;line-height:1.65}
@@ -169,158 +70,55 @@ header{
 .bubble h3{font-size:14px;font-weight:700;margin:8px 0 3px;color:#f1f5f9}
 .bubble strong{font-weight:600;color:#f1f5f9}
 .bubble em{font-style:italic;color:var(--text2)}
-.bubble code{
-  background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);
-  border-radius:5px;padding:1px 6px;
-  font-size:0.87em;font-family:'SF Mono','Fira Code','Consolas',monospace;
-  color:#c4b5fd;
-}
+.bubble code{background:rgba(124,58,237,0.1);border:1px solid rgba(124,58,237,0.2);border-radius:5px;padding:1px 6px;font-size:0.87em;font-family:'SF Mono','Fira Code','Consolas',monospace;color:#c4b5fd}
 .code-wrap{margin:10px 0;border:1px solid rgba(255,255,255,0.07);border-radius:12px;overflow:hidden;background:rgba(0,0,0,0.4)}
-.code-header{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05)}
+.code-header{display:flex;align-items:center;padding:8px 14px;border-bottom:1px solid rgba(255,255,255,0.05)}
 .code-lang{font-size:10px;font-weight:700;color:#7c3aed;font-family:monospace;text-transform:uppercase;letter-spacing:1px}
 .code-wrap pre{margin:0;padding:14px;font-size:13px;line-height:1.65;overflow-x:auto;color:#e2e8f0;font-family:'SF Mono','Fira Code','Consolas',monospace}
-.code-wrap pre::-webkit-scrollbar{height:3px}
-.code-wrap pre::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:2px}
 .bubble.warn-b{color:#fde68a}
 .bubble.err-b{color:#fca5a5}
 
-/* Typing indicator */
 .typing-row{display:flex;gap:12px;margin-bottom:24px;align-items:flex-start}
 .typing-dots{display:flex;align-items:center;gap:5px;padding-top:5px}
 .dot{width:7px;height:7px;border-radius:50%;background:var(--purple);animation:throb 1.4s ease-in-out infinite}
 .dot:nth-child(2){animation-delay:.2s}.dot:nth-child(3){animation-delay:.4s}
 @keyframes throb{0%,60%,100%{opacity:.18;transform:scale(.65)}30%{opacity:1;transform:scale(1)}}
-.search-label{font-size:11px;color:var(--purple);margin-right:4px;font-weight:500}
 
-/* ── Limit banner ── */
-#limit-bar{
-  margin:0 14px 10px;flex-shrink:0;
-  background:rgba(91,33,182,0.07);
-  border:1px solid rgba(91,33,182,0.2);
-  border-radius:14px;padding:11px 16px;
-  display:none;justify-content:space-between;align-items:center;
-  animation:fadeUp 0.2s ease;
-}
+#limit-bar{margin:0 14px 10px;flex-shrink:0;background:rgba(91,33,182,0.07);border:1px solid rgba(91,33,182,0.2);border-radius:14px;padding:11px 16px;display:none;justify-content:space-between;align-items:center}
 #limit-bar.show{display:flex}
-.lb-txt .lb-t{font-size:13px;font-weight:600}
-.lb-txt .lb-s{font-size:11px;color:var(--muted);margin-top:2px}
-.lb-cta{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;white-space:nowrap;transition:opacity .2s}
-.lb-cta:hover{opacity:.85}
+.lb-t{font-size:13px;font-weight:600}
+.lb-s{font-size:11px;color:var(--muted);margin-top:2px}
+.lb-cta{background:linear-gradient(135deg,#5b21b6,#7c3aed);color:#fff;border:none;border-radius:9px;padding:8px 14px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif}
 
-/* ── Input ── */
-#input-area{
-  padding:10px 14px 22px;
-  border-top:1px solid var(--border);
-  background:rgba(8,8,11,0.95);
-  backdrop-filter:blur(20px);
-  flex-shrink:0;z-index:5;position:relative;
-}
-#input-box{
-  max-width:740px;margin:0 auto;
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:20px;
-  padding:13px 13px 13px 18px;
-  display:flex;align-items:flex-end;gap:10px;
-  transition:border-color 0.2s,box-shadow 0.2s;
-  position:relative;
-}
-#input-box:focus-within{
-  border-color:rgba(124,58,237,0.4);
-  box-shadow:0 0 0 3px rgba(124,58,237,0.06);
-}
+#input-area{padding:10px 14px 22px;border-top:1px solid var(--border);background:rgba(8,8,11,0.95);backdrop-filter:blur(20px);flex-shrink:0;z-index:5}
+#input-box{max-width:740px;margin:0 auto;background:var(--bg2);border:1px solid var(--border);border-radius:20px;padding:13px 13px 13px 18px;display:flex;align-items:flex-end;gap:10px;transition:border-color 0.2s,box-shadow 0.2s}
+#input-box:focus-within{border-color:rgba(124,58,237,0.4);box-shadow:0 0 0 3px rgba(124,58,237,0.06)}
 #web-ind{font-size:13px;margin-bottom:8px;flex-shrink:0;display:none;color:var(--purple);animation:pulse 2s ease-in-out infinite}
 @keyframes pulse{0%,100%{opacity:.6}50%{opacity:1}}
 #web-ind.show{display:block}
-
-textarea#inp{
-  flex:1;background:transparent;border:none;outline:none;
-  color:var(--text);font-size:14px;line-height:1.6;
-  resize:none;font-family:'Inter',sans-serif;
-  min-height:24px;max-height:160px;
-}
+textarea#inp{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-size:14px;line-height:1.6;resize:none;font-family:'Inter',sans-serif;min-height:24px;max-height:160px}
 textarea#inp::placeholder{color:var(--dimmed)}
 textarea#inp::-webkit-scrollbar{width:0}
+#send{width:36px;height:36px;border-radius:11px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);color:var(--dimmed);font-size:17px;cursor:default;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+#send.on{background:linear-gradient(135deg,#5b21b6,#7c3aed);border-color:transparent;color:#fff;cursor:pointer;box-shadow:0 2px 16px rgba(124,58,237,0.45)}
+#send.on:hover{transform:scale(1.05)}
+#input-foot{text-align:center;font-size:10px;color:var(--dimmed);margin-top:8px}
 
-#send{
-  width:36px;height:36px;border-radius:11px;flex-shrink:0;
-  background:var(--bg3);border:1px solid var(--border);
-  color:var(--dimmed);font-size:17px;cursor:default;
-  display:flex;align-items:center;justify-content:center;
-  transition:all 0.2s;
-}
-#send.on{
-  background:linear-gradient(135deg,#5b21b6,#7c3aed);
-  border-color:transparent;color:#fff;cursor:pointer;
-  box-shadow:0 2px 16px rgba(124,58,237,0.45);
-}
-#send.on:hover{transform:scale(1.05);box-shadow:0 4px 20px rgba(124,58,237,0.55)}
-#input-foot{text-align:center;font-size:10px;color:var(--dimmed);margin-top:8px;letter-spacing:0.1px}
-
-/* ── Modal ── */
-#overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.82);
-  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
-  display:none;align-items:flex-end;justify-content:center;z-index:500;
-}
+#overlay{position:fixed;inset:0;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px);display:none;align-items:flex-end;justify-content:center;z-index:500}
 #overlay.show{display:flex}
-#modal{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-top:1px solid rgba(124,58,237,0.2);
-  border-radius:24px 24px 0 0;
-  padding:16px 24px 48px;
-  width:100%;max-width:460px;
-  position:relative;overflow:hidden;
-}
-#modal::before{
-  content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);
-  width:300px;height:200px;
-  background:radial-gradient(ellipse,rgba(124,58,237,0.12) 0%,transparent 70%);
-  pointer-events:none;
-}
+#modal{background:var(--bg2);border:1px solid var(--border);border-top:1px solid rgba(124,58,237,0.2);border-radius:24px 24px 0 0;padding:16px 24px 48px;width:100%;max-width:460px;position:relative;overflow:hidden}
 .modal-handle{width:36px;height:4px;background:var(--bg4);border-radius:2px;margin:0 auto 28px}
-.modal-logo{margin-bottom:18px;filter:drop-shadow(0 0 24px rgba(124,58,237,0.55))}
-.modal-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin-bottom:6px}
-.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65;font-weight:500}
-.price-card{
-  background:var(--bg3);
-  border:1px solid rgba(124,58,237,0.18);
-  border-radius:16px;padding:20px;margin-bottom:20px;
-}
+.modal-title{font-size:22px;font-weight:800;letter-spacing:-0.5px;margin:16px 0 6px}
+.modal-sub{font-size:13px;color:var(--muted);margin-bottom:24px;line-height:1.65}
+.price-card{background:var(--bg3);border:1px solid rgba(124,58,237,0.18);border-radius:16px;padding:20px;margin-bottom:20px}
 .price-num{font-size:30px;font-weight:800;letter-spacing:-1.5px;margin-bottom:16px}
 .price-num span{font-size:13px;font-weight:500;color:var(--muted)}
 .feat{display:flex;gap:10px;align-items:center;margin-bottom:10px;font-size:13px;color:#c4c4c4;font-weight:500}
 .feat-ic{font-size:14px;width:20px;flex-shrink:0}
-#do-upgrade{
-  width:100%;
-  background:linear-gradient(135deg,#5b21b6 0%,#7c3aed 50%,#a855f7 100%);
-  color:#fff;border:none;border-radius:14px;
-  padding:16px;font-size:15px;font-weight:700;
-  cursor:pointer;margin-bottom:10px;
-  box-shadow:0 4px 24px rgba(124,58,237,0.5);
-  font-family:'Inter',sans-serif;letter-spacing:-0.2px;
-  transition:opacity .2s,transform .15s;
-}
-#do-upgrade:hover{opacity:.9;transform:translateY(-1px)}
-#cancel{
-  width:100%;background:transparent;color:var(--dimmed);
-  border:none;padding:11px;font-size:13px;
-  cursor:pointer;font-family:'Inter',sans-serif;
-  transition:color .2s;
-}
-#cancel:hover{color:var(--muted)}
-
-/* Toast */
-#toast{
-  position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:10px;padding:9px 16px;
-  font-size:12px;color:var(--text2);font-weight:500;
-  opacity:0;pointer-events:none;transition:all 0.3s;z-index:600;
-  white-space:nowrap;
-}
+#do-upgrade{width:100%;background:linear-gradient(135deg,#5b21b6 0%,#7c3aed 50%,#a855f7 100%);color:#fff;border:none;border-radius:14px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;margin-bottom:10px;box-shadow:0 4px 24px rgba(124,58,237,0.5);font-family:'Inter',sans-serif;transition:opacity .2s}
+#do-upgrade:hover{opacity:.9}
+#cancel{width:100%;background:transparent;color:var(--dimmed);border:none;padding:11px;font-size:13px;cursor:pointer;font-family:'Inter',sans-serif}
+#toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(10px);background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:9px 16px;font-size:12px;color:var(--text2);font-weight:500;opacity:0;pointer-events:none;transition:all 0.3s;z-index:600;white-space:nowrap}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -329,13 +127,10 @@ textarea#inp::-webkit-scrollbar{width:0}
   <div class="glow-blob" id="blob1"></div>
   <div class="glow-blob" id="blob2"></div>
 
-  <!-- Header -->
   <header>
     <div class="logo-area">
       <div id="hdr-logo" style="filter:drop-shadow(0 0 10px rgba(124,58,237,0.55))"></div>
-      <div style="display:flex;flex-direction:column;gap:3px">
-        <div class="logo-text">Void</div>
-      </div>
+      <div class="logo-text">Void</div>
       <div class="usage-pill" id="usage-pill">6/6 free</div>
     </div>
     <div class="header-right">
@@ -347,7 +142,6 @@ textarea#inp::-webkit-scrollbar{width:0}
     </div>
   </header>
 
-  <!-- Messages -->
   <div id="messages">
     <div id="empty">
       <div class="empty-logo-wrap" id="empty-logo"></div>
@@ -355,40 +149,27 @@ textarea#inp::-webkit-scrollbar{width:0}
       <p class="empty-sub">Ask anything. I can reason, search the web, write code, and more.</p>
       <div id="suggestions">
         <button class="sug-card" onclick="go('What is happening in the news today?')">
-          <span class="sug-icon">🌐</span>
-          <span class="sug-label">Latest news</span>
-          What's happening in the news today?
+          <span class="sug-icon">🌐</span><span class="sug-label">Latest news</span>What's happening in the news today?
         </button>
         <button class="sug-card" onclick="go('Write a Python function to reverse a string')">
-          <span class="sug-icon">💻</span>
-          <span class="sug-label">Write code</span>
-          Write a Python function to reverse a string
+          <span class="sug-icon">💻</span><span class="sug-label">Write code</span>Write a Python function to reverse a string
         </button>
         <button class="sug-card" onclick="go('Help me write a professional bio about myself')">
-          <span class="sug-icon">✍️</span>
-          <span class="sug-label">Write for me</span>
-          Help me write a professional bio
+          <span class="sug-icon">✍️</span><span class="sug-label">Write for me</span>Help me write a professional bio
         </button>
-        <button class="sug-card" onclick="go('Explain how black holes form in simple terms')">
-          <span class="sug-icon">🕳️</span>
-          <span class="sug-label">Explain it</span>
-          How do black holes actually form?
+        <button class="sug-card" onclick="go('How do black holes actually form?')">
+          <span class="sug-icon">🕳️</span><span class="sug-label">Explain it</span>How do black holes actually form?
         </button>
       </div>
     </div>
     <div id="thread"></div>
   </div>
 
-  <!-- Limit bar -->
   <div id="limit-bar">
-    <div class="lb-txt">
-      <div class="lb-t">Daily limit reached</div>
-      <div class="lb-s">Resets at midnight · Upgrade for unlimited</div>
-    </div>
+    <div><div class="lb-t">Daily limit reached</div><div class="lb-s">Resets at midnight · Upgrade for unlimited</div></div>
     <button class="lb-cta" onclick="openModal()">Upgrade →</button>
   </div>
 
-  <!-- Input -->
   <div id="input-area">
     <div id="input-box">
       <span id="web-ind">🌐</span>
@@ -400,11 +181,10 @@ textarea#inp::-webkit-scrollbar{width:0}
     <div id="input-foot">Void may make mistakes · Don't share sensitive info</div>
   </div>
 
-  <!-- Upgrade Modal -->
   <div id="overlay" onclick="overlayClick(event)">
     <div id="modal">
       <div class="modal-handle"></div>
-      <div class="modal-logo" id="modal-logo"></div>
+      <div id="modal-logo" style="filter:drop-shadow(0 0 24px rgba(124,58,237,0.55))"></div>
       <div class="modal-title">Void Pro</div>
       <p class="modal-sub">Remove limits and unlock the full experience.</p>
       <div class="price-card">
@@ -424,12 +204,12 @@ textarea#inp::-webkit-scrollbar{width:0}
 </div>
 
 <script>
-// ─── Config — paste your API key here ────────────────────────
-const API_KEY = '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';
+// ─── Paste your Gemini API key here ──────────────────────────
+const API_KEY = 'AQ.Ab8RN6KCaxGx3XqSHivi3gASDpSigsS2PsG94_92Iu7qs89_Aw';
 // ─────────────────────────────────────────────────────────────
 
 const FREE_LIMIT = 6;
-const SK = 'voidai_v5';
+const SK = 'voidai_gemini_v1';
 const BLOCKED = [
   /how\s+to\s+(make|build|create|synthesize).*(bomb|weapon|explosive|poison|meth|fentanyl)/i,
   /(kill|harm|murder|attack)\s+(someone|myself|yourself|people)/i,
@@ -437,29 +217,23 @@ const BLOCKED = [
   /child\s+(porn|sexual|nude|exploit|abuse)/i,
 ];
 
-let msgs = [], webOn = false, busy = false;
+let msgs=[], webOn=false, busy=false;
 
-// ─── Storage ──────────────────────────────────────────────────
 function getU(){try{return JSON.parse(localStorage.getItem(SK))||{c:0,d:new Date().toDateString(),pro:false}}catch{return{c:0,d:new Date().toDateString(),pro:false}}}
 function setU(u){try{localStorage.setItem(SK,JSON.stringify(u))}catch{}}
 function rem(){const u=getU();if(u.pro)return Infinity;if(u.d!==new Date().toDateString())return FREE_LIMIT;return Math.max(0,FREE_LIMIT-u.c)}
 function isSafe(t){return!BLOCKED.some(r=>r.test(t))}
 
-// ─── SVG Logo ─────────────────────────────────────────────────
 function logo(s,id=''){
   return`<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
     <radialGradient id="b${id}" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#000"/>
-      <stop offset="35%" stop-color="#0a0014"/>
-      <stop offset="58%" stop-color="#2d0a5e"/>
-      <stop offset="75%" stop-color="#5b21b6" stop-opacity=".95"/>
-      <stop offset="90%" stop-color="#7c3aed" stop-opacity=".45"/>
-      <stop offset="100%" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0%" stop-color="#000"/><stop offset="35%" stop-color="#0a0014"/>
+      <stop offset="58%" stop-color="#2d0a5e"/><stop offset="75%" stop-color="#5b21b6" stop-opacity=".95"/>
+      <stop offset="90%" stop-color="#7c3aed" stop-opacity=".45"/><stop offset="100%" stop-color="#000" stop-opacity="0"/>
     </radialGradient>
     <radialGradient id="g${id}" cx="50%" cy="50%" r="50%">
-      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0"/>
-      <stop offset="100%" stop-color="#a855f7" stop-opacity=".3"/>
+      <stop offset="55%" stop-color="#7c3aed" stop-opacity="0"/><stop offset="100%" stop-color="#a855f7" stop-opacity=".3"/>
     </radialGradient>
     <filter id="f${id}"><feGaussianBlur stdDeviation="1.8"/></filter>
     <filter id="f2${id}"><feGaussianBlur stdDeviation="3"/></filter>
@@ -473,30 +247,21 @@ function logo(s,id=''){
   <circle cx="50" cy="50" r="21" fill="#000"/>
   <circle cx="50" cy="50" r="21" fill="none" stroke="#7c3aed" stroke-width="1.8" opacity=".85" filter="url(#f${id})"/>
   <circle cx="50" cy="50" r="23.5" fill="none" stroke="#c084fc" stroke-width=".6" opacity=".28"/>
-  <circle cx="50" cy="50" r="26" fill="none" stroke="#a855f7" stroke-width=".3" opacity=".15"/>
   <circle cx="29" cy="44" r="1.3" fill="#c084fc" opacity=".65"/>
   <circle cx="71" cy="56" r="1" fill="#a855f7" opacity=".5"/>
-  <circle cx="37" cy="63" r=".7" fill="#8b5cf6" opacity=".4"/>
   </svg>`;
 }
 
-document.getElementById('hdr-logo').innerHTML = logo(32,'h');
-document.getElementById('empty-logo').innerHTML = logo(72,'e');
-document.getElementById('modal-logo').innerHTML = logo(52,'m');
+document.getElementById('hdr-logo').innerHTML=logo(32,'h');
+document.getElementById('empty-logo').innerHTML=logo(72,'e');
+document.getElementById('modal-logo').innerHTML=logo(52,'m');
 
-// ─── UI updates ───────────────────────────────────────────────
 function updateUI(){
-  const u=getU(), r=rem();
+  const u=getU(),r=rem();
   const pill=document.getElementById('usage-pill');
   const upgBtn=document.getElementById('upg-btn');
-  if(u.pro){
-    pill.textContent='Pro ∞';pill.className='usage-pill pro';
-    upgBtn.textContent='✓ Pro';upgBtn.className='upgrade-btn paid';
-  } else {
-    pill.textContent=`${r}/${FREE_LIMIT} free`;
-    pill.className='usage-pill'+(r<=2?' warn':'');
-    upgBtn.textContent='Upgrade';upgBtn.className='upgrade-btn';
-  }
+  if(u.pro){pill.textContent='Pro ∞';pill.className='usage-pill pro';upgBtn.textContent='✓ Pro';upgBtn.className='upgrade-btn paid'}
+  else{pill.textContent=`${r}/${FREE_LIMIT} free`;pill.className='usage-pill'+(r<=2?' warn':'');upgBtn.textContent='Upgrade';upgBtn.className='upgrade-btn'}
   document.getElementById('limit-bar').classList.toggle('show',!u.pro&&r<=0);
   const ta=document.getElementById('inp');
   ta.placeholder=!u.pro&&r<=0?'Upgrade to keep chatting…':'Message Void…';
@@ -511,29 +276,15 @@ function toggleWeb(){
 }
 
 function onType(el){
-  el.style.height='auto';
-  el.style.height=Math.min(el.scrollHeight,160)+'px';
+  el.style.height='auto';el.style.height=Math.min(el.scrollHeight,160)+'px';
   document.getElementById('send').className=el.value.trim()&&!busy?'on':'';
 }
-
 function onKey(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-
 function scrollBot(){const m=document.getElementById('messages');m.scrollTop=m.scrollHeight}
+function showToast(msg,dur=2000){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur)}
 
-function showToast(msg,dur=2000){
-  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
-
-// ─── Markdown ─────────────────────────────────────────────────
 function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function inline(t){
-  return esc(t)
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>');
-}
+function inline(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*(.+?)\*/g,'<em>$1</em>')}
 function md(text){
   const lines=text.split('\n');let html='',i=0;
   while(i<lines.length){
@@ -543,31 +294,22 @@ function md(text){
       while(i<lines.length&&!lines[i].startsWith('```')){code+=esc(lines[i])+'\n';i++}
       html+=`<div class="code-wrap"><div class="code-header"><span class="code-lang">${lang||'code'}</span></div><pre><code>${code.trimEnd()}</code></pre></div>`;i++;
     } else if(/^#{1,3} /.test(l)){
-      const n=l.match(/^(#+)/)[1].length;
-      html+=`<h${n}>${inline(l.replace(/^#+\s/,''))}</h${n}>`;i++;
+      const n=l.match(/^(#+)/)[1].length;html+=`<h${n}>${inline(l.replace(/^#+\s/,''))}</h${n}>`;i++;
     } else if(/^[-*] /.test(l)){
-      html+='<ul>';
-      while(i<lines.length&&/^[-*] /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^[-*] /,''))}</li>`;i++}
-      html+='</ul>';
+      html+='<ul>';while(i<lines.length&&/^[-*] /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^[-*] /,''))}</li>`;i++}html+='</ul>';
     } else if(/^\d+\. /.test(l)){
-      html+='<ol>';
-      while(i<lines.length&&/^\d+\. /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^\d+\. /,''))}</li>`;i++}
-      html+='</ol>';
+      html+='<ol>';while(i<lines.length&&/^\d+\. /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^\d+\. /,''))}</li>`;i++}html+='</ol>';
     } else if(l.trim()===''){html+='<p style="height:6px;margin:0"></p>';i++}
     else{html+=`<p>${inline(l)}</p>`;i++}
   }
   return html;
 }
 
-// ─── Message rendering ────────────────────────────────────────
 function addMsg(role,content,cls=''){
   document.getElementById('empty').style.display='none';
-  const th=document.getElementById('thread');
-  th.style.display='block';
-  const row=document.createElement('div');
-  row.className=`msg-row${role==='user'?' user':''}`;
-  const av=document.createElement('div');
-  av.className=`av ${role==='user'?'user':'bot'}`;
+  const th=document.getElementById('thread');th.style.display='block';
+  const row=document.createElement('div');row.className=`msg-row${role==='user'?' user':''}`;
+  const av=document.createElement('div');av.className=`av ${role==='user'?'user':'bot'}`;
   av.innerHTML=role==='user'?'You':logo(30,'t'+Date.now());
   const col=document.createElement('div');col.className='msg-col';
   if(role==='assistant'){const n=document.createElement('div');n.className='msg-name';n.textContent='VOID';col.appendChild(n)}
@@ -576,27 +318,56 @@ function addMsg(role,content,cls=''){
   bub.innerHTML=role==='user'?`<p>${esc(content)}</p>`:md(content);
   col.appendChild(bub);row.appendChild(av);row.appendChild(col);
   th.appendChild(row);scrollBot();
-  return bub;
 }
 
 function showTyping(){
   const th=document.getElementById('thread');
-  const div=document.createElement('div');
-  div.id='typing';div.className='typing-row';
-  div.innerHTML=`
-    <div class="av bot" style="filter:drop-shadow(0 0 8px rgba(124,58,237,0.5))">${logo(30,'ty')}</div>
-    <div class="msg-col">
-      <div class="msg-name">VOID</div>
-      <div class="typing-dots">
-        ${webOn?'<span class="search-label">🌐 Searching…</span>':''}
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    </div>`;
+  const div=document.createElement('div');div.id='typing';div.className='typing-row';
+  div.innerHTML=`<div class="av bot">${logo(30,'ty')}</div><div class="msg-col"><div class="msg-name">VOID</div><div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   th.appendChild(div);scrollBot();
 }
 function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
 
-// ─── Send ─────────────────────────────────────────────────────
+// ─── Gemini API call ──────────────────────────────────────────
+async function callGemini(history, userText) {
+  // Build contents array for Gemini
+  const contents = history.map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }]
+  }));
+  contents.push({ role: 'user', parts: [{ text: userText }] });
+
+  const model = webOn ? 'gemini-2.0-flash' : 'gemini-2.0-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${API_KEY}`;
+
+  const body = {
+    contents,
+    systemInstruction: {
+      parts: [{ text: `You are Void, a helpful, safe, and intelligent AI assistant. Be clear, accurate, and concise. Use markdown formatting when helpful — headers, bullets, code blocks. Never assist with illegal activity, violence, self-harm, weapons, or harmful content. If someone seems in crisis, respond with empathy and direct them to call or text 988.` }]
+    },
+    generationConfig: { maxOutputTokens: 1500, temperature: 0.7 },
+    safetySettings: [
+      { category: 'HARM_CATEGORY_HARASSMENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_HATE_SPEECH', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_SEXUALLY_EXPLICIT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+      { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_MEDIUM_AND_ABOVE' },
+    ]
+  };
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+
+  const data = await res.json();
+  if (!res.ok) throw new Error(data?.error?.message || `HTTP ${res.status}`);
+
+  const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+  if (!reply) throw new Error('No response from Gemini');
+  return reply;
+}
+
 async function send(override){
   const ta=document.getElementById('inp');
   const text=(override||ta.value).trim();
@@ -608,53 +379,28 @@ async function send(override){
   if(!isSafe(text)){
     addMsg('user',text);
     addMsg('assistant',"I can't help with that. If you're going through something difficult, please reach out — call or text **988** anytime.",'warn-b');
-    ta.value='';ta.style.height='auto';
-    document.getElementById('send').className='';
-    return;
+    ta.value='';ta.style.height='auto';document.getElementById('send').className='';return;
   }
 
-  if(API_KEY==='YOUR_API_KEY_HERE'){
+  if(API_KEY==='YOUR_GEMINI_KEY_HERE'){
     addMsg('user',text);
-    addMsg('assistant','⚠️ No API key set. Open the HTML file and paste your Anthropic API key where it says `YOUR_API_KEY_HERE` near the top of the script.','warn-b');
-    ta.value='';ta.style.height='auto';
-    document.getElementById('send').className='';
-    return;
+    addMsg('assistant','⚠️ **No API key set.**\n\nTo fix this:\n1. Go to **aistudio.google.com**\n2. Click **Get API key** (it\'s free)\n3. Open this HTML file in Notepad\n4. Replace `YOUR_GEMINI_KEY_HERE` with your key\n5. Save and re-upload','warn-b');
+    ta.value='';ta.style.height='auto';document.getElementById('send').className='';return;
   }
 
   msgs.push({role:'user',content:text});
   addMsg('user',text);
-  ta.value='';ta.style.height='auto';
-  document.getElementById('send').className='';
+  ta.value='';ta.style.height='auto';document.getElementById('send').className='';
   busy=true;showTyping();
 
   if(!u.pro){
     const today=new Date().toDateString();
-    setU({c:(u.d===today?u.c:0)+1,d:today,pro:false});
-    updateUI();
+    setU({c:(u.d===today?u.c:0)+1,d:today,pro:false});updateUI();
   }
 
   try{
-    const body={
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1500,
-      system:`You are Void, a highly capable and safe AI assistant. Be clear, accurate, and genuinely helpful. Use markdown when it helps — headers, bullets, code blocks. Keep responses concise but complete. Never assist with illegal activity, violence, self-harm, weapons, or harmful content.`,
-      messages:msgs.map(m=>({role:m.role,content:m.content})),
-      ...(webOn?{tools:[{type:'web_search_20250305',name:'web_search'}]}:{}),
-    };
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true',
-      },
-      body:JSON.stringify(body),
-    });
+    const reply = await callGemini(msgs.slice(0,-1), text);
     rmTyping();
-    const data=await res.json();
-    if(!res.ok)throw new Error(data?.error?.message||`HTTP ${res.status}`);
-    const reply=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim()||'No response. Please try again.';
     msgs.push({role:'assistant',content:reply});
     addMsg('assistant',reply);
   } catch(err){
@@ -666,197 +412,13 @@ async function send(override){
 }
 
 function go(t){send(t)}
-function newChat(){
-  msgs=[];
-  document.getElementById('thread').innerHTML='';
-  document.getElementById('thread').style.display='none';
-  document.getElementById('empty').style.display='flex';
-}
-
-// ─── Modal ────────────────────────────────────────────────────
+function newChat(){msgs=[];document.getElementById('thread').innerHTML='';document.getElementById('thread').style.display='none';document.getElementById('empty').style.display='flex'}
 function openModal(){document.getElementById('overlay').classList.add('show')}
 function closeModal(){document.getElementById('overlay').classList.remove('show')}
 function overlayClick(e){if(e.target===e.currentTarget)closeModal()}
-function upgrade(){
-  const u=getU();setU({...u,pro:true});
-  updateUI();closeModal();showToast('Welcome to Pro! ✦');
-}
+function upgrade(){const u=getU();setU({...u,pro:true});updateUI();closeModal();showToast('Welcome to Pro! ✦')}
 
-// ─── Init ─────────────────────────────────────────────────────
-(function(){
-  const u=getU(),today=new Date().toDateString();
-  if(!u.pro&&u.d!==today)setU({c:0,d:today,pro:false});
-  updateUI();
-})();
-</script>
-</body>
-</html>  const t=document.getElementById('toast');
-  t.textContent=msg;t.classList.add('show');
-  setTimeout(()=>t.classList.remove('show'),dur);
-}
-
-// ─── Markdown ─────────────────────────────────────────────────
-function esc(t){return t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function inline(t){
-  return esc(t)
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/`([^`]+)`/g,'<code>$1</code>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>');
-}
-function md(text){
-  const lines=text.split('\n');let html='',i=0;
-  while(i<lines.length){
-    const l=lines[i];
-    if(l.startsWith('```')){
-      const lang=l.slice(3).trim();let code='';i++;
-      while(i<lines.length&&!lines[i].startsWith('```')){code+=esc(lines[i])+'\n';i++}
-      html+=`<div class="code-wrap"><div class="code-header"><span class="code-lang">${lang||'code'}</span></div><pre><code>${code.trimEnd()}</code></pre></div>`;i++;
-    } else if(/^#{1,3} /.test(l)){
-      const n=l.match(/^(#+)/)[1].length;
-      html+=`<h${n}>${inline(l.replace(/^#+\s/,''))}</h${n}>`;i++;
-    } else if(/^[-*] /.test(l)){
-      html+='<ul>';
-      while(i<lines.length&&/^[-*] /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^[-*] /,''))}</li>`;i++}
-      html+='</ul>';
-    } else if(/^\d+\. /.test(l)){
-      html+='<ol>';
-      while(i<lines.length&&/^\d+\. /.test(lines[i])){html+=`<li>${inline(lines[i].replace(/^\d+\. /,''))}</li>`;i++}
-      html+='</ol>';
-    } else if(l.trim()===''){html+='<p style="height:6px;margin:0"></p>';i++}
-    else{html+=`<p>${inline(l)}</p>`;i++}
-  }
-  return html;
-}
-
-// ─── Message rendering ────────────────────────────────────────
-function addMsg(role,content,cls=''){
-  document.getElementById('empty').style.display='none';
-  const th=document.getElementById('thread');
-  th.style.display='block';
-  const row=document.createElement('div');
-  row.className=`msg-row${role==='user'?' user':''}`;
-  const av=document.createElement('div');
-  av.className=`av ${role==='user'?'user':'bot'}`;
-  av.innerHTML=role==='user'?'You':logo(30,'t'+Date.now());
-  const col=document.createElement('div');col.className='msg-col';
-  if(role==='assistant'){const n=document.createElement('div');n.className='msg-name';n.textContent='VOID';col.appendChild(n)}
-  const bub=document.createElement('div');
-  bub.className=`bubble${role==='user'?' user-b':''}${cls?' '+cls:''}`;
-  bub.innerHTML=role==='user'?`<p>${esc(content)}</p>`:md(content);
-  col.appendChild(bub);row.appendChild(av);row.appendChild(col);
-  th.appendChild(row);scrollBot();
-  return bub;
-}
-
-function showTyping(){
-  const th=document.getElementById('thread');
-  const div=document.createElement('div');
-  div.id='typing';div.className='typing-row';
-  div.innerHTML=`
-    <div class="av bot" style="filter:drop-shadow(0 0 8px rgba(124,58,237,0.5))">${logo(30,'ty')}</div>
-    <div class="msg-col">
-      <div class="msg-name">VOID</div>
-      <div class="typing-dots">
-        ${webOn?'<span class="search-label">🌐 Searching…</span>':''}
-        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-      </div>
-    </div>`;
-  th.appendChild(div);scrollBot();
-}
-function rmTyping(){const el=document.getElementById('typing');if(el)el.remove()}
-
-// ─── Send ─────────────────────────────────────────────────────
-async function send(override){
-  const ta=document.getElementById('inp');
-  const text=(override||ta.value).trim();
-  if(!text||busy)return;
-
-  const u=getU(),r=rem();
-  if(!u.pro&&r<=0){openModal();return}
-
-  if(!isSafe(text)){
-    addMsg('user',text);
-    addMsg('assistant',"I can't help with that. If you're going through something difficult, please reach out — call or text **988** anytime.",'warn-b');
-    ta.value='';ta.style.height='auto';
-    document.getElementById('send').className='';
-    return;
-  }
-
-  if(API_KEY==='YOUR_API_KEY_HERE'){
-    addMsg('user',text);
-    addMsg('assistant','⚠️ No API key set. Open the HTML file and paste your Anthropic API key where it says `YOUR_API_KEY_HERE` near the top of the script.','warn-b');
-    ta.value='';ta.style.height='auto';
-    document.getElementById('send').className='';
-    return;
-  }
-
-  msgs.push({role:'user',content:text});
-  addMsg('user',text);
-  ta.value='';ta.style.height='auto';
-  document.getElementById('send').className='';
-  busy=true;showTyping();
-
-  if(!u.pro){
-    const today=new Date().toDateString();
-    setU({c:(u.d===today?u.c:0)+1,d:today,pro:false});
-    updateUI();
-  }
-
-  try{
-    const body={
-      model:'claude-sonnet-4-20250514',
-      max_tokens:1500,
-      system:`You are Void, a highly capable and safe AI assistant. Be clear, accurate, and genuinely helpful. Use markdown when it helps — headers, bullets, code blocks. Keep responses concise but complete. Never assist with illegal activity, violence, self-harm, weapons, or harmful content.`,
-      messages:msgs.map(m=>({role:m.role,content:m.content})),
-      ...(webOn?{tools:[{type:'web_search_20250305',name:'web_search'}]}:{}),
-    };
-    const res=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':API_KEY,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true',
-      },
-      body:JSON.stringify(body),
-    });
-    rmTyping();
-    const data=await res.json();
-    if(!res.ok)throw new Error(data?.error?.message||`HTTP ${res.status}`);
-    const reply=(data.content||[]).filter(b=>b.type==='text').map(b=>b.text).join('\n').trim()||'No response. Please try again.';
-    msgs.push({role:'assistant',content:reply});
-    addMsg('assistant',reply);
-  } catch(err){
-    rmTyping();
-    const e=`**Error:** ${err.message}`;
-    msgs.push({role:'assistant',content:e});
-    addMsg('assistant',e,'err-b');
-  } finally{busy=false}
-}
-
-function go(t){send(t)}
-function newChat(){
-  msgs=[];
-  document.getElementById('thread').innerHTML='';
-  document.getElementById('thread').style.display='none';
-  document.getElementById('empty').style.display='flex';
-}
-
-// ─── Modal ────────────────────────────────────────────────────
-function openModal(){document.getElementById('overlay').classList.add('show')}
-function closeModal(){document.getElementById('overlay').classList.remove('show')}
-function overlayClick(e){if(e.target===e.currentTarget)closeModal()}
-function upgrade(){
-  const u=getU();setU({...u,pro:true});
-  updateUI();closeModal();showToast('Welcome to Pro! ✦');
-}
-
-// ─── Init ─────────────────────────────────────────────────────
-(function(){
-  const u=getU(),today=new Date().toDateString();
-  if(!u.pro&&u.d!==today)setU({c:0,d:today,pro:false});
-  updateUI();
-})();
+(function(){const u=getU(),today=new Date().toDateString();if(!u.pro&&u.d!==today)setU({c:0,d:today,pro:false});updateUI()})();
 </script>
 </body>
 </html>
