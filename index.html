@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 <title>Atlantis</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" integrity="sha384-SALc35EccAf6RzGw4iNsyj7kTPr33K7RoGzYu+7heZhT8s0GZouafRiCg1qy44AS" crossorigin="anonymous"></script>
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -1090,7 +1090,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 //  CONFIG
 // ═══════════════════════════════════════════
 const CFG = {
-  GROQ_KEY:        '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',
+  GROQ_KEY:        localStorage.getItem('void_groq_key') || '',
   GOOGLE_CLIENT_ID:'150961219100-p58fvb7i08ohrktv8g2re2mobrchnm9n.apps.googleusercontent.com',
   EJS_PUBLIC:      'SVoq5vsAqJjG1Tucy',
   EJS_SERVICE:     'service_leypjvk',
@@ -1237,7 +1237,11 @@ function toast(m,type='',d=2800){
 // Auth
 function getU(){return DB.get(SK.U)||{}}
 function saveU(u){DB.set(SK.U,u)}
-function hash(p){let h=0;for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i);h|=0}return h.toString(36)}
+async function hash(p){
+  const enc=new TextEncoder().encode(p);
+  const buf=await crypto.subtle.digest('SHA-256',enc);
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
 function stab(t){
   clr('ae','as2');
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',(t==='in'&&i===0)||(t==='up'&&i===1)));
@@ -1248,7 +1252,7 @@ function stab(t){
 }
 function teye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='password'?'&#128065;':'&#128584;';}
 
-function login(){
+async function login(){
   clr('ae','as2');
   const em=document.getElementById('ie').value.trim().toLowerCase();
   const pw=document.getElementById('ip').value;
@@ -1256,10 +1260,10 @@ function login(){
   const users=getU();const u=users[em];
   if(!u){setAl('ae','No account found with that email.','e');return}
   if(!u.verified){pendingUser=u;startVerify(em);return}
-  if(u.pw!==hash(pw)){setAl('ae','Incorrect password.','e');return}
+  if(u.pw!==await hash(pw)){setAl('ae','Incorrect password.','e');return}
   startSess(u);
 }
-function signup(){
+async function signup(){
   clr('ae','as2');
   const name=document.getElementById('un').value.trim();
   const em=document.getElementById('ue').value.trim().toLowerCase();
@@ -1269,7 +1273,7 @@ function signup(){
   if(pw.length<6){setAl('ae','Password must be at least 6 characters.','e');return}
   const users=getU();
   if(users[em]){setAl('ae','An account already exists with that email.','e');return}
-  const u={name,em,pw:hash(pw),verified:false,pro:false,joined:Date.now()};
+  const u={name,em,pw:await hash(pw),verified:false,pro:false,joined:Date.now()};
   users[em]=u;saveU(users);pendingUser=u;startVerify(em);
 }
 function gDemo(){
@@ -1368,7 +1372,7 @@ function handleGoogleCB(response){
 function genCode(){return String(Math.floor(100000+Math.random()*900000))}
 async function startVerify(em){
   verCode=genCode();
-  console.log(`%c[Atlantis] Code for ${em}: ${verCode}`,'color:#a78bfa;font-size:16px;font-weight:900');
+
   document.getElementById('vel').textContent=em;
   for(let i=0;i<6;i++){const d=document.getElementById('d'+i);if(d){d.value='';d.classList.remove('filled');}}
   clr('ve');showS('verify-screen');
@@ -1378,13 +1382,13 @@ async function startVerify(em){
 async function doSendEmail(toEmail,toName,code){
   setAl('vi','Sending verification email...','i');
   if(!ejsOk&&typeof emailjs!=='undefined')initEJS();
-  if(!ejsOk){setAl('vi',`Email service unavailable. Your code: ${code}`,'i');return;}
+  if(!ejsOk){setAl('vi','Email service unavailable. Please try again later.','i');return;}
   try{
     await emailjs.send(CFG.EJS_SERVICE,CFG.EJS_TEMPLATE,{to_email:toEmail,to_name:toName,code,app_name:'Atlantis AI'});
     setAl('vi',`Email sent to ${toEmail}. Check your inbox and spam folder.`,'i');
   }catch(err){
     console.error('[Atlantis] Email error:',err);
-    setAl('vi',`Could not send email (${err?.text||err?.message||'error'}). Your code: ${code}`,'i');
+    setAl('vi',`Could not send email. Please try again later.`,'i');
   }
 }
 function oi(i){
@@ -1410,7 +1414,7 @@ function verify(){
 async function resend(){
   if(!pendingUser)return;
   verCode=genCode();
-  console.log(`%c[Atlantis] New code: ${verCode}`,'color:#a78bfa;font-weight:900');
+
   clr('ve');
   await doSendEmail(pendingUser.em,pendingUser.name||'there',verCode);
   toast('New code sent','info');
@@ -1554,11 +1558,12 @@ function renderHist(searchQuery){
 
 function chatItemHtml(c,pins){
   const isPinned=pins.includes(c.id);
-  return `<div class="ci${c.id===cid?' on':''}" onclick="loadChat('${c.id}')">
+  const safeId=esc(c.id);
+  return `<div class="ci${c.id===cid?' on':''}" data-cid="${safeId}" onclick="loadChat(this.dataset.cid)">
     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;color:var(--t3)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
     <span class="ci-txt">${esc(c.title)}</span>
-    <button class="ci-pin${isPinned?' pinned':''}" onclick="togglePin(event,'${c.id}')" title="${isPinned?'Unpin':'Pin'}">&#128204;</button>
-    <button class="ci-del" onclick="delChat(event,'${c.id}')" title="Delete">&#10005;</button>
+    <button class="ci-pin${isPinned?' pinned':''}" data-cid="${safeId}" onclick="togglePin(event,this.dataset.cid)" title="${isPinned?'Unpin':'Pin'}">&#128204;</button>
+    <button class="ci-del" data-cid="${safeId}" onclick="delChat(event,this.dataset.cid)" title="Delete">&#10005;</button>
   </div>`;
 }
 function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
@@ -1587,7 +1592,8 @@ function scr(){const mw=document.getElementById('mw');mw.scrollTo({top:mw.scroll
 
 // Markdown
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
-function inl(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\[(.+?)\]\((.+?)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>');}
+function sanitizeUrl(url){try{const u=new URL(url,location.href);if(u.protocol==='http:'||u.protocol==='https:')return u.href;}catch{}return '';}
+function inl(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/\[(.+?)\]\((.+?)\)/g,(_,txt,url)=>{const safe=sanitizeUrl(url);return safe?`<a href="${safe}" target="_blank" rel="noopener noreferrer">${txt}</a>`:txt;});}
 function md(text){
   const lines=text.split('\n');let h='',i=0;
   while(i<lines.length){
@@ -1745,7 +1751,7 @@ function buildSys(){
 }
 async function callAI(history,text){
   const key=CFG.GROQ_KEY.trim();
-  if(!key||key==='YOUR_GROQ_KEY_HERE')throw new Error('NO_KEY');
+  if(!key)throw new Error('NO_KEY');
 
   // Build messages for Groq (OpenAI-compatible format)
   const messages=[
@@ -1811,7 +1817,7 @@ async function send(ov){
     rmT();
     let m;
     if(err.message==='NO_KEY'){
-      m='No API key. Go to **console.groq.com** → API Keys → Create API Key. Paste it in the file where it says YOUR_GROQ_KEY_HERE.';
+      m='No API key configured. Open the browser console and run: `localStorage.setItem("void_groq_key","gsk_YOUR_KEY")` with your key from **console.groq.com** → API Keys.';
     }else if(err.message==='BAD_KEY'){
       m='API key rejected. Make sure you copied the full key from console.groq.com → API Keys. It should start with gsk_...';
     }else if(err.message==='RATE_LIMIT'){
