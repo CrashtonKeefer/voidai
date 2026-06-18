@@ -1115,6 +1115,16 @@ const DB={
   del:k=>{try{localStorage.removeItem(k)}catch{}}
 };
 
+// ═══════════════════════════════════════════
+//  SHARED UTILITIES
+// ═══════════════════════════════════════════
+const $id=id=>document.getElementById(id);
+function getInitials(name,fallback='?'){return name?name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):fallback;}
+function hideAllScreens(){document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.style.display='none'});}
+function getOtpCode(){return Array.from({length:6},(_,i)=>$id('d'+i).value).join('');}
+function syncPrefToggles(){['web','typing','sound','compact','safety','autoread'].forEach(k=>{const el=$id('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});const ss=$id('s-style');if(ss)ss.value=prefs.style||'balanced';const vs=$id('s-voicespeed');if(vs)vs.value=prefs.voiceSpeed||1;}
+function getTimeGreeting(name){const hr=new Date().getHours();const period=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';return name?period+', '+name:period;}
+
 function mkL(s,bg='#020c14'){
   return`<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
@@ -1138,7 +1148,7 @@ function mkL(s,bg='#020c14'){
   </svg>`;
 }
 ['auth-logo','verify-logo','sb-logo','emp-logo','mo-logo','land-logo','hero-logo','foot-logo'].forEach((id,i)=>{
-  const el=document.getElementById(id);if(el)el.innerHTML=mkL([56,46,28,68,52,30,72,26][i]);
+  const el=$id(id);if(el)el.innerHTML=mkL([56,46,28,68,52,30,72,26][i]);
 });
 
 // EmailJS
@@ -1158,17 +1168,17 @@ function enterAuth(tab){
   stab(tab);
 }
 function toggleMobileNav(){
-  document.getElementById('land-mobile-menu').classList.toggle('show');
+  $id('land-mobile-menu').classList.toggle('show');
 }
 function initLandingScroll(){
-  const scrollEl=document.getElementById('land-scroll');
-  const nav=document.getElementById('land-nav');
+  const scrollEl=$id('land-scroll');
+  const nav=$id('land-nav');
   if(!scrollEl||!nav)return;
   scrollEl.addEventListener('scroll',()=>{
     nav.classList.toggle('scrolled',scrollEl.scrollTop>20);
     // Parallax wave effect
-    const wp1=document.getElementById('wavepath1');
-    const wp2=document.getElementById('wavepath2');
+    const wp1=$id('wavepath1');
+    const wp2=$id('wavepath2');
     if(wp1&&wp2){
       const t=scrollEl.scrollTop*0.05;
       wp1.style.transform=`translateX(${t}px)`;
@@ -1185,7 +1195,7 @@ function initLandingScroll(){
   });
 }
 function initParticles(){
-  const container=document.getElementById('hero-particles');
+  const container=$id('hero-particles');
   if(!container)return;
   const count=24;
   for(let i=0;i<count;i++){
@@ -1215,22 +1225,22 @@ function loadTheme(){
 
 // Screens
 function showS(id){
-  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.style.display='none'});
-  document.getElementById('app').classList.remove('show');
-  const el=document.getElementById(id);
+  hideAllScreens();
+  $id('app').classList.remove('show');
+  const el=$id(id);
   if(el){el.style.display='flex';requestAnimationFrame(()=>el.classList.add('show'));}
 }
 function showApp(){
-  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('show');s.style.display='none'});
-  document.getElementById('app').classList.add('show');
+  hideAllScreens();
+  $id('app').classList.add('show');
 }
 
 // Alerts & toast
-function setAl(id,msg,type){const el=document.getElementById(id);if(!el)return;el.textContent=msg;el.className=`al al-${type}${msg?' show':''}`;}
+function setAl(id,msg,type){const el=$id(id);if(!el)return;el.textContent=msg;el.className=`al al-${type}${msg?' show':''}`;}
 function clr(...ids){ids.forEach(id=>setAl(id,'','e'));}
 let _tt;
 function toast(m,type='',d=2800){
-  const t=document.getElementById('toast');t.textContent=m;t.className=`show ${type}`;
+  const t=$id('toast');t.textContent=m;t.className=`show ${type}`;
   clearTimeout(_tt);_tt=setTimeout(()=>t.className='',d);
 }
 
@@ -1241,17 +1251,17 @@ function hash(p){let h=0;for(let i=0;i<p.length;i++){h=((h<<5)-h)+p.charCodeAt(i
 function stab(t){
   clr('ae','as2');
   document.querySelectorAll('.tab').forEach((el,i)=>el.classList.toggle('on',(t==='in'&&i===0)||(t==='up'&&i===1)));
-  document.getElementById('fi').style.display=t==='in'?'block':'none';
-  document.getElementById('fu').style.display=t==='up'?'block':'none';
-  document.getElementById('at').textContent=t==='in'?'Welcome back':'Create account';
-  document.getElementById('asub').textContent=t==='in'?'Sign in to continue your conversations with Atlantis.':'Join Atlantis and start chatting in seconds.';
+  $id('fi').style.display=t==='in'?'block':'none';
+  $id('fu').style.display=t==='up'?'block':'none';
+  $id('at').textContent=t==='in'?'Welcome back':'Create account';
+  $id('asub').textContent=t==='in'?'Sign in to continue your conversations with Atlantis.':'Join Atlantis and start chatting in seconds.';
 }
-function teye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='password'?'&#128065;':'&#128584;';}
+function teye(id,btn){const i=$id(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='password'?'&#128065;':'&#128584;';}
 
 function login(){
   clr('ae','as2');
-  const em=document.getElementById('ie').value.trim().toLowerCase();
-  const pw=document.getElementById('ip').value;
+  const em=$id('ie').value.trim().toLowerCase();
+  const pw=$id('ip').value;
   if(!em||!pw){setAl('ae','Please fill in both fields.','e');return}
   const users=getU();const u=users[em];
   if(!u){setAl('ae','No account found with that email.','e');return}
@@ -1261,9 +1271,9 @@ function login(){
 }
 function signup(){
   clr('ae','as2');
-  const name=document.getElementById('un').value.trim();
-  const em=document.getElementById('ue').value.trim().toLowerCase();
-  const pw=document.getElementById('up2').value;
+  const name=$id('un').value.trim();
+  const em=$id('ue').value.trim().toLowerCase();
+  const pw=$id('up2').value;
   if(!name||!em||!pw){setAl('ae','Please fill in all fields.','e');return}
   if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(em)){setAl('ae','Please enter a valid email address.','e');return}
   if(pw.length<6){setAl('ae','Password must be at least 6 characters.','e');return}
@@ -1356,7 +1366,7 @@ function handleGoogleCB(response){
       saveU(users);
     }
     // Close the sign-in overlay if it's open
-    document.getElementById('google-signin-overlay')?.remove();
+    $id('google-signin-overlay')?.remove();
     startSess(users[em]);
   }catch(e){
     console.error('[Atlantis] Google CB error:',e);
@@ -1369,10 +1379,10 @@ function genCode(){return String(Math.floor(100000+Math.random()*900000))}
 async function startVerify(em){
   verCode=genCode();
   console.log(`%c[Atlantis] Code for ${em}: ${verCode}`,'color:#a78bfa;font-size:16px;font-weight:900');
-  document.getElementById('vel').textContent=em;
-  for(let i=0;i<6;i++){const d=document.getElementById('d'+i);if(d){d.value='';d.classList.remove('filled');}}
+  $id('vel').textContent=em;
+  for(let i=0;i<6;i++){const d=$id('d'+i);if(d){d.value='';d.classList.remove('filled');}}
   clr('ve');showS('verify-screen');
-  setTimeout(()=>{const d=document.getElementById('d0');if(d)d.focus();},350);
+  setTimeout(()=>{const d=$id('d0');if(d)d.focus();},350);
   await doSendEmail(em,pendingUser?.name||'there',verCode);
 }
 async function doSendEmail(toEmail,toName,code){
@@ -1388,20 +1398,20 @@ async function doSendEmail(toEmail,toName,code){
   }
 }
 function oi(i){
-  const el=document.getElementById('d'+i);
+  const el=$id('d'+i);
   const v=el.value.replace(/[^0-9]/g,'');
   el.value=v.slice(-1);el.classList.toggle('filled',!!el.value);
-  if(v&&i<5)document.getElementById('d'+(i+1)).focus();
-  const full=Array.from({length:6},(_,j)=>document.getElementById('d'+j).value).join('');
+  if(v&&i<5)$id('d'+(i+1)).focus();
+  const full=getOtpCode();
   if(full.length===6)setTimeout(verify,80);
 }
 function ok2(e,i){
-  if(e.key==='Backspace'&&!document.getElementById('d'+i).value&&i>0){
-    const p=document.getElementById('d'+(i-1));p.value='';p.classList.remove('filled');p.focus();
+  if(e.key==='Backspace'&&!$id('d'+i).value&&i>0){
+    const p=$id('d'+(i-1));p.value='';p.classList.remove('filled');p.focus();
   }
 }
 function verify(){
-  const entered=Array.from({length:6},(_,i)=>document.getElementById('d'+i).value).join('');
+  const entered=getOtpCode();
   if(entered.length<6){setAl('ve','Please enter the full 6-digit code.','e');return}
   if(entered!==verCode){setAl('ve','That code is incorrect. Please try again.','e');return}
   const users=getU();
@@ -1418,7 +1428,7 @@ async function resend(){
 
 // Session
 function startSess(u){user=u;DB.set(SK.S,{em:u.em});loadPrefs();initApp();}
-function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';closeMu();closeSettings();showS('landing-screen');setTimeout(()=>{initLandingScroll();if(!document.querySelector('.particle'))initParticles();},50);}
+function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;$id('mc').innerHTML='';$id('emp').style.display='flex';closeMu();closeSettings();showS('landing-screen');setTimeout(()=>{initLandingScroll();if(!document.querySelector('.particle'))initParticles();},50);}
 (function(){
   loadTheme();
   const s=DB.get(SK.S);
@@ -1432,14 +1442,14 @@ function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;document.getElementByI
 })();
 
 // Prefs
-function loadPrefs(){const saved=DB.get(SK.PR+'_'+(user?.em||''));if(saved)prefs={...prefs,...saved};if(prefs.web){webOn=true;document.getElementById('wbt').classList.add('on');document.getElementById('wind').classList.add('show');}}
+function loadPrefs(){const saved=DB.get(SK.PR+'_'+(user?.em||''));if(saved)prefs={...prefs,...saved};if(prefs.web){webOn=true;$id('wbt').classList.add('on');$id('wind').classList.add('show');}}
 function savePrefs(){DB.set(SK.PR+'_'+(user?.em||''),prefs);}
 function savePref(k,v){prefs[k]=v;savePrefs();}
 function toggleSetting(k){
   prefs[k]=!prefs[k];savePrefs();
-  const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);
-  if(k==='web'){webOn=prefs[k];document.getElementById('wbt').classList.toggle('on',webOn);document.getElementById('wind').classList.toggle('show',webOn);}
-  if(k==='compact'){document.getElementById('mc').style.gap=prefs[k]?'10px':'';}
+  const el=$id('t-'+k);if(el)el.classList.toggle('on',prefs[k]);
+  if(k==='web'){webOn=prefs[k];$id('wbt').classList.toggle('on',webOn);$id('wind').classList.toggle('show',webOn);}
+  if(k==='compact'){$id('mc').style.gap=prefs[k]?'10px':'';}
   toast(prefs[k]?'Enabled':'Disabled');
 }
 
@@ -1462,48 +1472,40 @@ function initGoogleAuth(){
 
 function initApp(){
   const first=user.name?user.name.split(' ')[0]:'there';
-  const hr=new Date().getHours();
-  const greetTime=hr<12?'Good morning':'hr<17'?'Good afternoon':'Good evening';
-  const timeGreet=hr<12?'Good morning':'Good afternoon';
-  document.getElementById('emp-greet-sub').textContent=hr<12?'Good morning':'hr<17'?'Good afternoon':'Good evening, '+first;
-  document.getElementById('greet').textContent=`What can I help with today?`;
-  const ini=user.name?user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'?';
-  document.getElementById('uav').textContent=ini;
-  document.getElementById('uname').textContent=user.name||'User';
-  document.getElementById('uemail').textContent=user.em||'';
+  $id('emp-greet-sub').textContent=getTimeGreeting(first);
+  $id('greet').textContent=`What can I help with today?`;
+  $id('uav').textContent=getInitials(user.name);
+  $id('uname').textContent=user.name||'User';
+  $id('uemail').textContent=user.em||'';
   updUI();renderHist();showApp();
-  ['web','typing','sound','compact','safety','autoread'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
-  const ss=document.getElementById('s-style');if(ss)ss.value=prefs.style||'balanced';
+  syncPrefToggles();
 }
 
 // Sidebar
-function tsb(){document.getElementById('sb').classList.toggle('off')}
-function tum(){document.getElementById('um').classList.toggle('show')}
-function closeMu(){document.getElementById('um').classList.remove('show')}
+function tsb(){$id('sb').classList.toggle('off')}
+function tum(){$id('um').classList.toggle('show')}
+function closeMu(){$id('um').classList.remove('show')}
 document.addEventListener('click',e=>{if(!e.target.closest('.ur')&&!e.target.closest('.um'))closeMu();});
 
 // Settings
 function openSettings(){
   closeMu();
-  const ini=user?.name?user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'?';
-  document.getElementById('sp-av').textContent=ini;
-  document.getElementById('sp-name').textContent=user?.name||'User';
-  document.getElementById('sp-email').textContent=user?.em||'—';
-  document.getElementById('sp-badge').textContent=user?.pro?'Pro plan':'Free plan';
+  $id('sp-av').textContent=getInitials(user?.name);
+  $id('sp-name').textContent=user?.name||'User';
+  $id('sp-email').textContent=user?.em||'—';
+  $id('sp-badge').textContent=user?.pro?'Pro plan':'Free plan';
   const chats=gChats();
-  document.getElementById('sp-count').textContent=`${chats.length} chat${chats.length!==1?'s':''}`;
+  $id('sp-count').textContent=`${chats.length} chat${chats.length!==1?'s':''}`;
   let totalBytes=0;try{for(let k in localStorage)totalBytes+=localStorage[k].length*2;}catch{}
   const kb=(totalBytes/1024).toFixed(1);
   const pct=Math.min((totalBytes/(5*1024*1024))*100,100);
-  document.getElementById('sp-bar').style.width=pct+'%';
-  document.getElementById('sp-storage').textContent=`${kb} KB used of 5 MB available`;
-  ['web','typing','sound','compact','safety','autoread'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
-  const ss=document.getElementById('s-style');if(ss)ss.value=prefs.style||'balanced';
-  const vs=document.getElementById('s-voicespeed');if(vs)vs.value=prefs.voiceSpeed||1;
+  $id('sp-bar').style.width=pct+'%';
+  $id('sp-storage').textContent=`${kb} KB used of 5 MB available`;
+  syncPrefToggles();
   applyTheme(DB.get('atl_theme')||'dark');
-  document.getElementById('sov').classList.add('show');
+  $id('sov').classList.add('show');
 }
-function closeSettings(){document.getElementById('sov').classList.remove('show')}
+function closeSettings(){$id('sov').classList.remove('show')}
 function clearHistory(){if(!confirm('Clear all conversations? This cannot be undone.'))return;const all=DB.get(SK.CH)||{};delete all[user?.em];DB.set(SK.CH,all);newChat();toast('All conversations cleared','');}
 function deleteAccount(){const users=getU();delete users[user?.em];saveU(users);logout();toast('Account deleted');}
 
@@ -1519,7 +1521,7 @@ function saveChat(){
   sChats(chats);renderHist();
 }
 function renderHist(searchQuery){
-  const el=document.getElementById('hist');if(!user){el.innerHTML='';return}
+  const el=$id('hist');if(!user){el.innerHTML='';return}
   let chats=gChats();
   const pins=getPins();
 
@@ -1561,29 +1563,29 @@ function chatItemHtml(c,pins){
     <button class="ci-del" onclick="delChat(event,'${c.id}')" title="Delete">&#10005;</button>
   </div>`;
 }
-function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
+function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];$id('mc').innerHTML='';$id('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>$id('mw').scrollTop=99999,80);}
 function delChat(e,id){e.stopPropagation();sChats(gChats().filter(c=>c.id!==id));if(cid===id)newChat();else renderHist();}
-function newChat(){cid='c_'+Date.now();msgs=[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';renderHist();}
+function newChat(){cid='c_'+Date.now();msgs=[];$id('mc').innerHTML='';$id('emp').style.display='flex';renderHist();}
 
 // Usage
 function getUsg(){const a=DB.get(SK.US)||{};const u=a[user?.em]||{c:0,d:new Date().toDateString()};if(u.d!==new Date().toDateString())return{c:0,d:new Date().toDateString()};return u;}
 function setUsg(u){const a=DB.get(SK.US)||{};a[user.em]=u;DB.set(SK.US,a)}
 function rem(){if(user?.pro)return Infinity;return Math.max(0,FREE_LIMIT-getUsg().c)}
 function updUI(){
-  const r=rem();const chip=document.getElementById('uch');const pb=document.getElementById('pbt');
+  const r=rem();const chip=$id('uch');const pb=$id('pbt');
   if(user?.pro){chip.textContent='Pro';chip.className='uchip pro';pb.textContent='Pro';pb.className='pbt paid';}
   else{chip.textContent=`${r} / ${FREE_LIMIT} free`;chip.className='uchip'+(r<=2?' warn':'');pb.textContent='Upgrade';pb.className='pbt';}
-  document.getElementById('lb').classList.toggle('show',!user?.pro&&r<=0);
-  const ta=document.getElementById('mta');ta.disabled=!user?.pro&&r<=0;ta.placeholder=!user?.pro&&r<=0?'Upgrade to keep chatting...':'Message Atlantis...';
+  $id('lb').classList.toggle('show',!user?.pro&&r<=0);
+  const ta=$id('mta');ta.disabled=!user?.pro&&r<=0;ta.placeholder=!user?.pro&&r<=0?'Upgrade to keep chatting...':'Message Atlantis...';
 }
 
 // Web
-function tweb(){webOn=!webOn;prefs.web=webOn;savePrefs();document.getElementById('wbt').classList.toggle('on',webOn);document.getElementById('wind').classList.toggle('show',webOn);toast(webOn?'Web search on':'Web search off',webOn?'info':'');}
+function tweb(){webOn=!webOn;prefs.web=webOn;savePrefs();$id('wbt').classList.toggle('on',webOn);$id('wind').classList.toggle('show',webOn);toast(webOn?'Web search on':'Web search off',webOn?'info':'');}
 
 // Input
-function oty(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,200)+'px';document.getElementById('sbtn').className=el.value.trim()&&!busy?'on':'';}
+function oty(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,200)+'px';$id('sbtn').className=el.value.trim()&&!busy?'on':'';}
 function oky(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-function scr(){const mw=document.getElementById('mw');mw.scrollTo({top:mw.scrollHeight,behavior:'smooth'});}
+function scr(){const mw=$id('mw');mw.scrollTo({top:mw.scrollHeight,behavior:'smooth'});}
 
 // Markdown
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1605,18 +1607,18 @@ function md(text){
   }
   return h;
 }
-function cpCode(id){const el=document.getElementById(id);if(el)navigator.clipboard.writeText(el.textContent).then(()=>toast('Copied to clipboard','success'));}
+function cpCode(id){const el=$id(id);if(el)navigator.clipboard.writeText(el.textContent).then(()=>toast('Copied to clipboard','success'));}
 
 // Render
 function renderM(role,content,cls,msgIdx){
-  document.getElementById('emp').style.display='none';
-  const mc=document.getElementById('mc');
+  $id('emp').style.display='none';
+  const mc=$id('mc');
   const row=document.createElement('div');row.className=`mr${role==='user'?' u':''}`;
   row.dataset.idx=msgIdx!==undefined?msgIdx:msgs.length-1;
   if(prefs.compact)row.style.marginBottom='16px';
   const av=document.createElement('div');av.className=`av ${role==='user'?'u':'b'}`;
   if(role==='assistant'){av.innerHTML=mkL(34);}
-  else{av.textContent=user?.name?user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'U';}
+  else{av.textContent=getInitials(user?.name,'U');}
   const body=document.createElement('div');body.className='mb';
   if(role==='assistant'){const w=document.createElement('div');w.className='mwho';w.textContent='Atlantis';body.appendChild(w);}
   const bub=document.createElement('div');
@@ -1670,7 +1672,7 @@ function editMsg(idx){
 function cancelEdit(idx){
   const row=document.querySelector(`.mr[data-idx="${idx}"]`);
   if(!row)return;
-  document.getElementById('mc').innerHTML='';
+  $id('mc').innerHTML='';
   msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
 }
 
@@ -1682,7 +1684,7 @@ async function saveEdit(idx){
   if(!newText)return;
   // Truncate history after this point and resend
   msgs=msgs.slice(0,idx);
-  document.getElementById('mc').innerHTML='';
+  $id('mc').innerHTML='';
   msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
   await send(newText);
 }
@@ -1690,7 +1692,7 @@ async function saveEdit(idx){
 function deleteMsg(idx){
   if(!confirm('Delete this message?'))return;
   msgs.splice(idx,1);
-  document.getElementById('mc').innerHTML='';
+  $id('mc').innerHTML='';
   msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
   saveChat();
 }
@@ -1702,7 +1704,7 @@ async function regenMsg(idx){
   if(userIdx<0)return;
   const userText=msgs[userIdx].content;
   msgs=msgs.slice(0,userIdx);
-  document.getElementById('mc').innerHTML='';
+  $id('mc').innerHTML='';
   msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
   await send(userText);
 }
@@ -1729,12 +1731,12 @@ function speakMsg(idx,btn){
 }
 function showTyping(){
   if(!prefs.typing)return;
-  const mc=document.getElementById('mc');
+  const mc=$id('mc');
   const row=document.createElement('div');row.className='tr';row.id='tr';
   row.innerHTML=`<div class="av b">${mkL(34)}</div><div class="mb"><div class="mwho">Atlantis</div><div class="dots">${webOn?'<span class="stag">Searching web...</span>':''}<div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   mc.appendChild(row);scr();
 }
-function rmT(){const e=document.getElementById('tr');if(e)e.remove();}
+function rmT(){const e=$id('tr');if(e)e.remove();}
 function playSound(){
   if(!prefs.sound)return;
   try{const ctx=new AudioContext();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(520,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(380,ctx.currentTime+0.25);g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);o.start();o.stop(ctx.currentTime+0.3);}catch{}
@@ -1789,7 +1791,7 @@ async function callAI(history,text){
   return r;
 }
 async function send(ov){
-  const ta=document.getElementById('mta');
+  const ta=$id('mta');
   const text=(ov||ta.value).trim();
   if(!text||busy||!user)return;
   if(!user.pro&&rem()<=0){openMo();return}
@@ -1797,11 +1799,11 @@ async function send(ov){
     msgs.push({role:'user',content:text});renderM('user',text,null,msgs.length-1);
     const s="I can't help with that. If you're going through something difficult, please reach out — call or text 988 any time. You're not alone.";
     msgs.push({role:'assistant',content:s});renderM('assistant',s,'warn',msgs.length-1);
-    ta.value='';ta.style.height='auto';document.getElementById('sbtn').className='';saveChat();return;
+    ta.value='';ta.style.height='auto';$id('sbtn').className='';saveChat();return;
   }
   if(!cid)cid='c_'+Date.now();
   msgs.push({role:'user',content:text});renderM('user',text,null,msgs.length-1);
-  ta.value='';ta.style.height='auto';document.getElementById('sbtn').className='';
+  ta.value='';ta.style.height='auto';$id('sbtn').className='';
   busy=true;showTyping();
   if(!user.pro){const u=getUsg();setUsg({c:u.c+1,d:u.d});updUI();}
   try{
@@ -1829,13 +1831,13 @@ async function send(ov){
   }finally{busy=false;}
 }
 function go(t){send(t)}
-function openMo(){closeMu();document.getElementById('mo').classList.add('show')}
-function closeMo(){document.getElementById('mo').classList.remove('show')}
+function openMo(){closeMu();$id('mo').classList.add('show')}
+function closeMo(){$id('mo').classList.remove('show')}
 function doPro(){
   if(!user)return;
   const users=getU();user.pro=true;users[user.em]=user;saveU(users);
   updUI();closeMo();toast('Welcome to Pro!','success');
-  const badge=document.getElementById('sp-badge');if(badge)badge.textContent='Pro plan';
+  const badge=$id('sp-badge');if(badge)badge.textContent='Pro plan';
 }
 
 // ─── Voice Input (Web Speech API) ────────────────────────────
@@ -1858,8 +1860,8 @@ function toggleVoiceInput(){
   }
   recognition=initRecognition();
   if(!recognition)return;
-  const micBtn=document.getElementById('micbtn');
-  const ta=document.getElementById('mta');
+  const micBtn=$id('micbtn');
+  const ta=$id('mta');
 
   recognition.onstart=()=>{isRecording=true;micBtn.classList.add('recording');};
   recognition.onresult=(e)=>{
@@ -1883,39 +1885,39 @@ function openVoiceMode(){
   const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
   if(!SR){toast('Voice mode needs Chrome or Edge browser.','error');return;}
   voiceModeActive=true;
-  document.getElementById('voice-overlay').classList.add('show');
+  $id('voice-overlay').classList.add('show');
   startVoiceListening();
 }
 function closeVoiceMode(){
   voiceModeActive=false;
   if(voiceRecognition)voiceRecognition.stop();
   speechSynthesis.cancel();
-  document.getElementById('voice-overlay').classList.remove('show');
+  $id('voice-overlay').classList.remove('show');
 }
 function startVoiceListening(){
   if(!voiceModeActive)return;
   voiceRecognition=initRecognition();
   if(!voiceRecognition)return;
-  document.getElementById('voice-status').textContent='Listening...';
-  document.getElementById('voice-transcript').textContent='Speak naturally — Atlantis is listening';
+  $id('voice-status').textContent='Listening...';
+  $id('voice-transcript').textContent='Speak naturally — Atlantis is listening';
 
   voiceRecognition.onresult=async(e)=>{
     const transcript=e.results[0][0].transcript;
-    document.getElementById('voice-transcript').textContent=transcript;
+    $id('voice-transcript').textContent=transcript;
   };
   voiceRecognition.onend=async()=>{
     const lastResult=voiceRecognition._lastTranscript;
   };
   voiceRecognition.onresult=(e)=>{
     let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
-    document.getElementById('voice-transcript').textContent=t;
+    $id('voice-transcript').textContent=t;
     voiceRecognition._lastTranscript=t;
   };
   voiceRecognition.onspeechend=async()=>{
     voiceRecognition.stop();
     const text=voiceRecognition._lastTranscript;
     if(text && text.trim() && voiceModeActive){
-      document.getElementById('voice-status').textContent='Thinking...';
+      $id('voice-status').textContent='Thinking...';
       await voiceSend(text.trim());
     } else if(voiceModeActive){
       startVoiceListening();
@@ -1934,14 +1936,14 @@ async function voiceSend(text){
     const r=await callAI(msgs.slice(0,-1),text);
     msgs.push({role:'assistant',content:r});
     saveChat();
-    document.getElementById('voice-status').textContent='Speaking...';
-    document.getElementById('voice-transcript').textContent=r.slice(0,200);
+    $id('voice-status').textContent='Speaking...';
+    $id('voice-transcript').textContent=r.slice(0,200);
     const utter=new SpeechSynthesisUtterance(r.replace(/[#*`_]/g,''));
     utter.rate=prefs.voiceSpeed||1;
     utter.onend=()=>{if(voiceModeActive)startVoiceListening();};
     speechSynthesis.speak(utter);
   }catch(err){
-    document.getElementById('voice-status').textContent='Error — try again';
+    $id('voice-status').textContent='Error — try again';
     setTimeout(()=>{if(voiceModeActive)startVoiceListening();},1500);
   }
 }
@@ -1980,9 +1982,9 @@ const PROMPT_LIBRARY=[
 function openPromptLibrary(){
   closeMu();
   let html=PROMPT_LIBRARY.map(p=>`<div class="lib-item" onclick="usePrompt('${p.text.replace(/'/g,"\\'")}')"><div class="lib-cat">${p.cat}</div>${esc(p.text)}</div>`).join('');
-  document.getElementById('sp-title-text')?.remove();
-  const sp=document.getElementById('sp');
-  const existing=document.getElementById('prompt-lib-section');
+  $id('sp-title-text')?.remove();
+  const sp=$id('sp');
+  const existing=$id('prompt-lib-section');
   if(existing){existing.remove();}
   openSettings();
   const body=document.querySelector('.sp-body');
@@ -1993,7 +1995,7 @@ function openPromptLibrary(){
 }
 function usePrompt(text){
   closeSettings();
-  const ta=document.getElementById('mta');
+  const ta=$id('mta');
   ta.value=text;
   oty(ta);
   ta.focus();
