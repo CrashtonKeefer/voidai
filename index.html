@@ -3,20 +3,21 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
-<title>Void AI</title>
+<title>Atlantis</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#04040a;--bg2:#080810;--bg3:#0c0c18;--bg4:#101022;--bg5:#14142c;--bg6:#1a1a36;
-  --b:rgba(255,255,255,0.04);--b2:rgba(255,255,255,0.08);--b3:rgba(255,255,255,0.14);--b4:rgba(255,255,255,0.2);
-  --p1:#2e0458;--p2:#4a0e8f;--p3:#5b21b6;--p4:#6d28d9;--p5:#7c3aed;--p6:#8b5cf6;--p7:#a78bfa;--p8:#c4b5fd;--p9:#ede9fe;
-  --t1:#f0f0f8;--t2:#8888aa;--t3:#44445a;--t4:#1e1e32;
-  --red:#ef4444;--green:#22c55e;--amber:#f59e0b;--blue:#3b82f6;
+  --bg:#020c14;--bg2:#04141f;--bg3:#061c2c;--bg4:#082538;--bg5:#0a2e44;--bg6:#0d3650;
+  --b:rgba(125,211,252,0.07);--b2:rgba(125,211,252,0.13);--b3:rgba(125,211,252,0.2);--b4:rgba(125,211,252,0.28);
+  --p1:#022c3f;--p2:#024059;--p3:#0369a1;--p4:#0284c7;--p5:#0ea5e9;--p6:#38bdf8;--p7:#7dd3fc;--p8:#bae6fd;--p9:#e0f7ff;
+  --t1:#eafbff;--t2:#7fb3c9;--t3:#3a6478;--t4:#163444;
+  --red:#ef4444;--green:#2dd4bf;--amber:#f59e0b;--blue:#38bdf8;
   --r:12px;--rs:8px;--rl:18px;--rxl:28px;
-  --sh:0 24px 80px rgba(0,0,0,0.95);--sh2:0 6px 24px rgba(0,0,0,0.6);--sh3:0 2px 8px rgba(0,0,0,0.4);
-  --glow:0 0 80px rgba(91,33,182,0.12);--glow2:0 0 40px rgba(109,40,217,0.2);
+  --sh:0 24px 80px rgba(0,8,16,0.95);--sh2:0 6px 24px rgba(0,8,16,0.6);--sh3:0 2px 8px rgba(0,8,16,0.4);
+  --glow:0 0 80px rgba(14,165,233,0.15);--glow2:0 0 40px rgba(56,189,248,0.25);
 }
 html,body{height:100%;background:var(--bg);color:var(--t1);font-family:'Inter',sans-serif;overflow:hidden;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
 ::-webkit-scrollbar{width:3px;height:3px}
@@ -30,10 +31,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
 /* Blobs */
 .blob{position:fixed;border-radius:50%;filter:blur(130px);pointer-events:none;z-index:0}
-#b1{width:900px;height:700px;top:-300px;left:25%;background:radial-gradient(ellipse,rgba(46,4,88,0.22),transparent 70%);animation:bf 14s ease-in-out infinite}
-#b2{width:600px;height:600px;bottom:-200px;right:-180px;background:radial-gradient(ellipse,rgba(91,33,182,0.14),transparent 70%);animation:bf 10s ease-in-out 6s infinite}
-#b3{width:400px;height:400px;top:45%;left:-140px;background:radial-gradient(ellipse,rgba(46,4,88,0.1),transparent 70%);animation:bf 18s ease-in-out 11s infinite}
-#b4{width:250px;height:250px;top:20%;right:10%;background:radial-gradient(circle,rgba(91,33,182,0.06),transparent 70%);animation:bf 8s ease-in-out 3s infinite}
+#b1{width:900px;height:700px;top:-300px;left:25%;background:radial-gradient(ellipse,rgba(2,44,63,0.35),transparent 70%);animation:bf 14s ease-in-out infinite}
+#b2{width:600px;height:600px;bottom:-200px;right:-180px;background:radial-gradient(ellipse,rgba(3,105,161,0.22),transparent 70%);animation:bf 10s ease-in-out 6s infinite}
+#b3{width:400px;height:400px;top:45%;left:-140px;background:radial-gradient(ellipse,rgba(2,44,63,0.18),transparent 70%);animation:bf 18s ease-in-out 11s infinite}
+#b4{width:250px;height:250px;top:20%;right:10%;background:radial-gradient(circle,rgba(14,165,233,0.12),transparent 70%);animation:bf 8s ease-in-out 3s infinite}
 @keyframes bf{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-40px) scale(1.12)}}
 
 /* Screens */
@@ -56,7 +57,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .clogo{display:flex;justify-content:flex-start;margin-bottom:30px;position:relative;z-index:1}
 .clogo-inner{filter:drop-shadow(0 0 30px rgba(109,40,217,0.7)) drop-shadow(0 0 10px rgba(167,139,250,0.35));animation:logoFloat 5s ease-in-out infinite}
 @keyframes logoFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-8px) rotate(1deg)}}
-.ctitle{font-size:26px;font-weight:900;letter-spacing:-1.1px;margin-bottom:7px;background:linear-gradient(135deg,#ffffff 20%,var(--p8) 65%,var(--p6));-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;z-index:1;line-height:1.2}
+.ctitle{font-size:26px;font-weight:900;letter-spacing:-1.1px;margin-bottom:7px;background:linear-gradient(135deg,#fff 20%,var(--p7));-webkit-background-clip:text;-webkit-text-fill-color:transparent;position:relative;z-index:1;line-height:1.2}
 .csub{font-size:13.5px;color:var(--t3);line-height:1.68;margin-bottom:30px;position:relative;z-index:1}
 
 /* Tabs */
@@ -269,7 +270,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 .uchip.pro{color:var(--p7);border-color:rgba(167,139,250,.24);background:rgba(167,139,250,.07)}
 
 /* Messages */
-#mw{flex:1;overflow-y:auto;position:relative;z-index:1}
+#mw{flex:1;overflow-y:auto;position:relative;z-index:1;scroll-behavior:smooth}
+#mw::-webkit-scrollbar{width:5px}
+#mw::-webkit-scrollbar-thumb{background:rgba(125,211,252,.12);border-radius:99px}
+#mw::-webkit-scrollbar-thumb:hover{background:rgba(125,211,252,.22)}
 #mc{max-width:780px;margin:0 auto;padding:40px 22px 32px}
 
 /* Empty state */
@@ -458,7 +462,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 }
 #md::before{content:'';position:absolute;top:-180px;left:50%;transform:translateX(-50%);width:700px;height:450px;background:radial-gradient(ellipse,rgba(46,4,88,0.22),transparent 70%);pointer-events:none}
 .mh{width:44px;height:4px;background:var(--bg6);border-radius:2px;margin:0 auto 32px}
-.mt{font-size:26px;font-weight:900;letter-spacing:-.8px;margin:22px 0 9px;background:linear-gradient(135deg,#fff 25%,var(--p7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.mt{font-size:26px;font-weight:900;letter-spacing:-.8px;margin:22px 0 9px;background:linear-gradient(135deg,#fff 20%,var(--p7));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .ms{font-size:14px;color:var(--t3);margin-bottom:28px;line-height:1.68}
 .pc{background:rgba(255,255,255,.03);border:1px solid rgba(109,40,217,.18);border-radius:var(--r);padding:26px;margin-bottom:24px;position:relative;overflow:hidden;box-shadow:inset 0 1px 0 rgba(255,255,255,.04)}
 .pc::before{content:'';position:absolute;top:-80px;right:-80px;width:250px;height:250px;background:radial-gradient(circle,rgba(109,40,217,.14),transparent 70%)}
@@ -486,6 +490,172 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 #toast.info{border-color:rgba(109,40,217,.26);color:var(--p7);background:rgba(109,40,217,.09)}
 
 @keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Message action buttons ── */
+.msg-actions{display:flex;gap:4px;margin-top:8px;opacity:0;transition:opacity .2s}
+.mr:hover .msg-actions{opacity:1}
+.ma-btn{
+  width:26px;height:26px;border-radius:7px;background:rgba(255,255,255,.04);
+  border:1px solid rgba(125,211,252,.1);color:var(--t3);cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:all .18s;
+  font-family:'Inter',sans-serif;font-size:11px;font-weight:600;
+}
+.ma-btn:hover{background:rgba(14,165,233,.12);border-color:rgba(14,165,233,.3);color:var(--p7)}
+.ma-btn.ma-del:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:#f87171}
+.ma-btn.ma-save{width:auto;padding:0 12px;background:rgba(14,165,233,.14);border-color:rgba(14,165,233,.35);color:var(--p7);font-weight:600}
+.ma-btn.speaking{background:rgba(14,165,233,.2);border-color:rgba(14,165,233,.5);color:var(--p6);animation:micPulse 1.2s ease-in-out infinite}
+@keyframes micPulse{0%,100%{box-shadow:0 0 0 0 rgba(14,165,233,.4)}50%{box-shadow:0 0 0 6px rgba(14,165,233,0)}}
+
+/* Edit textarea */
+.edit-ta{
+  width:100%;background:rgba(14,165,233,.05);border:1.5px solid rgba(14,165,233,.3);
+  border-radius:14px;padding:12px 15px;color:var(--t1);font-size:14px;
+  font-family:'Inter',sans-serif;outline:none;resize:none;line-height:1.6;
+}
+.edit-ta:focus{border-color:rgba(14,165,233,.55);box-shadow:0 0 0 3px rgba(14,165,233,.1)}
+
+/* Mic button */
+#micbtn{
+  width:40px;height:40px;border-radius:12px;flex-shrink:0;
+  background:rgba(255,255,255,.04);border:1px solid var(--b2);
+  color:var(--t3);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:all .22s;
+}
+#micbtn:hover{border-color:rgba(14,165,233,.4);color:var(--p6);background:rgba(14,165,233,.06)}
+#micbtn.recording{
+  background:linear-gradient(135deg,#0ea5e9,#38bdf8);border-color:transparent;color:#fff;
+  box-shadow:0 0 0 0 rgba(14,165,233,.5);animation:micRecord 1.4s ease-in-out infinite;
+}
+@keyframes micRecord{0%{box-shadow:0 0 0 0 rgba(14,165,233,.5)}70%{box-shadow:0 0 0 14px rgba(14,165,233,0)}100%{box-shadow:0 0 0 0 rgba(14,165,233,0)}}
+
+/* Search bar in sidebar */
+.sb-search{position:relative;margin:0 8px 10px}
+.sb-search input{
+  width:100%;background:rgba(255,255,255,.03);border:1px solid var(--b);
+  border-radius:var(--rs);padding:9px 12px 9px 32px;color:var(--t1);
+  font-size:12.5px;font-family:'Inter',sans-serif;outline:none;transition:all .2s;
+}
+.sb-search input:focus{border-color:rgba(14,165,233,.4);background:rgba(14,165,233,.04)}
+.sb-search input::placeholder{color:var(--t4)}
+.sb-search svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none}
+
+/* Pin button on chat items */
+.ci-pin{opacity:0;background:none;border:none;color:var(--t3);cursor:pointer;font-size:11px;padding:3px 5px;border-radius:5px;transition:all .15s;flex-shrink:0;line-height:1}
+.ci:hover .ci-pin{opacity:1}
+.ci-pin.pinned{opacity:1;color:var(--p6)}
+.ci-pin:hover{color:var(--p7);background:rgba(14,165,233,.1)}
+
+/* Listening overlay for voice mode */
+#voice-overlay{position:fixed;inset:0;background:rgba(2,12,20,.92);backdrop-filter:blur(20px);z-index:300;display:none;align-items:center;justify-content:center;flex-direction:column}
+#voice-overlay.show{display:flex}
+.voice-rings{position:relative;width:160px;height:160px;display:flex;align-items:center;justify-content:center;margin-bottom:32px}
+.voice-ring{position:absolute;border-radius:50%;border:1.5px solid rgba(14,165,233,.4)}
+.vr1{width:160px;height:160px;animation:ringPulse 2s ease-in-out infinite}
+.vr2{width:120px;height:120px;animation:ringPulse 2s ease-in-out .3s infinite}
+.vr3{width:80px;height:80px;background:linear-gradient(135deg,#0284c7,#38bdf8);border:none;box-shadow:0 0 50px rgba(14,165,233,.6)}
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.12);opacity:1}}
+.voice-status{font-size:15px;font-weight:600;color:var(--p7);margin-bottom:8px}
+.voice-transcript{font-size:13px;color:var(--t3);max-width:320px;text-align:center;line-height:1.6;min-height:40px}
+.voice-close{position:absolute;top:24px;right:24px;width:38px;height:38px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid var(--b2);color:var(--t2);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px}
+
+/* Prompt library */
+.lib-item{padding:11px 14px;background:rgba(255,255,255,.025);border:1px solid var(--b);border-radius:var(--r);margin-bottom:7px;cursor:pointer;transition:all .18s;font-size:12.5px;color:var(--t2);line-height:1.5}
+.lib-item:hover{border-color:rgba(14,165,233,.3);background:rgba(14,165,233,.05);color:var(--t1)}
+.lib-cat{font-size:9px;font-weight:700;color:var(--p6);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+
+/* ════ LANDING PAGE ════ */
+#landing-screen{padding:0;overflow:hidden;display:none;align-items:stretch;justify-content:stretch}
+#landing-screen.show{display:flex}
+#land-scroll{width:100%;height:100%;overflow-y:auto;position:relative;z-index:1}
+
+/* Nav */
+#land-nav{position:fixed;top:0;left:0;right:0;z-index:50;padding:16px 0;transition:all .3s ease}
+#land-nav.scrolled{background:rgba(2,12,20,.85);backdrop-filter:blur(24px);border-bottom:1px solid var(--b);box-shadow:0 4px 24px rgba(0,8,16,.3)}
+.land-nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;gap:32px}
+.land-brand{display:flex;align-items:center;gap:9px;font-weight:900;font-size:18px;letter-spacing:-.6px;color:var(--t1)}
+.land-links{display:flex;gap:28px;margin-left:24px}
+.land-links a{color:var(--t2);font-size:13.5px;font-weight:600;text-decoration:none;transition:color .2s;letter-spacing:-.1px}
+.land-links a:hover{color:var(--p7)}
+.land-actions{display:flex;gap:10px;margin-left:auto}
+.land-btn-ghost{background:transparent;border:1px solid var(--b2);color:var(--t2);padding:9px 18px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;letter-spacing:-.1px}
+.land-btn-ghost:hover{border-color:var(--b4);color:var(--t1);background:rgba(255,255,255,.04)}
+.land-btn-ghost.lg{padding:14px 28px;font-size:14.5px;border-radius:12px}
+.land-btn-solid{background:linear-gradient(135deg,var(--p3),var(--p5));color:#fff;border:none;padding:9px 20px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;box-shadow:0 4px 20px rgba(2,132,199,.4);letter-spacing:-.1px}
+.land-btn-solid:hover{transform:translateY(-1px);box-shadow:0 6px 28px rgba(2,132,199,.55)}
+.land-btn-solid.lg{padding:14px 30px;font-size:14.5px;border-radius:12px;box-shadow:0 6px 28px rgba(2,132,199,.45)}
+.land-burger{display:none;background:transparent;border:1px solid var(--b2);color:var(--t2);width:38px;height:38px;border-radius:10px;cursor:pointer;align-items:center;justify-content:center;margin-left:auto}
+#land-mobile-menu{position:fixed;top:0;right:-280px;width:280px;height:100%;background:var(--bg2);border-left:1px solid var(--b2);z-index:90;display:flex;flex-direction:column;gap:14px;padding:80px 24px 24px;transition:right .3s cubic-bezier(.2,0,.2,1);box-shadow:var(--sh)}
+#land-mobile-menu.show{right:0}
+#land-mobile-menu a{color:var(--t2);font-size:14px;font-weight:600;text-decoration:none;padding:8px 0}
+#land-mobile-menu button{width:100%}
+
+/* Hero */
+.land-hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;padding:100px 24px 60px;overflow:hidden}
+.hero-glow{position:absolute;top:10%;left:50%;transform:translateX(-50%);width:900px;height:600px;background:radial-gradient(ellipse,rgba(14,165,233,.18),transparent 70%);pointer-events:none;z-index:0;animation:heroGlowPulse 6s ease-in-out infinite}
+@keyframes heroGlowPulse{0%,100%{opacity:.7;transform:translateX(-50%) scale(1)}50%{opacity:1;transform:translateX(-50%) scale(1.08)}}
+.hero-particles{position:absolute;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.particle{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(125,211,252,.6),transparent 70%);animation:particleFloat linear infinite}
+@keyframes particleFloat{0%{transform:translateY(110vh) translateX(0);opacity:0}10%{opacity:.7}90%{opacity:.5}100%{transform:translateY(-10vh) translateX(40px);opacity:0}}
+.hero-content{position:relative;z-index:1;text-align:center;max-width:680px}
+.hero-logo{display:flex;justify-content:center;margin-bottom:24px;filter:drop-shadow(0 0 50px rgba(14,165,233,.7)) drop-shadow(0 0 18px rgba(125,211,252,.4));animation:logoFloat 5s ease-in-out infinite}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:7px;background:rgba(14,165,233,.1);border:1px solid rgba(14,165,233,.25);border-radius:20px;padding:6px 16px;font-size:11.5px;font-weight:700;color:var(--p7);letter-spacing:.4px;margin-bottom:24px}
+.hero-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px rgba(45,212,191,.8)}
+.hero-title{font-size:clamp(40px,7vw,68px);font-weight:900;letter-spacing:-2.5px;line-height:1.05;color:var(--t1);margin-bottom:22px}
+.hero-title-grad{background:linear-gradient(135deg,var(--p6) 0%,var(--p8) 50%,#fff 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-size:200% auto;animation:gradShift 5s ease-in-out infinite}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+.hero-sub{font-size:16.5px;color:var(--t2);line-height:1.7;margin-bottom:38px;max-width:540px;margin-left:auto;margin-right:auto}
+.hero-cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:50px}
+.hero-waveline{position:absolute;bottom:0;left:0;right:0;height:80px;z-index:0}
+.hero-waveline svg{width:100%;height:100%}
+
+/* Sections */
+.land-section{padding:90px 24px;position:relative;z-index:1}
+.land-section.alt{background:rgba(255,255,255,.015)}
+.land-section-inner{max-width:1000px;margin:0 auto;text-align:center}
+.land-eyebrow{font-size:11.5px;font-weight:800;color:var(--p6);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px}
+.land-h2{font-size:clamp(26px,4vw,38px);font-weight:900;letter-spacing:-1.2px;color:var(--t1);margin-bottom:44px;line-height:1.15}
+.land-p{font-size:15px;color:var(--t2);line-height:1.75}
+
+.feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;text-align:left}
+.feat-card{background:rgba(255,255,255,.025);border:1px solid var(--b);border-radius:18px;padding:26px;transition:all .25s;position:relative;overflow:hidden}
+.feat-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(14,165,233,.06),transparent);opacity:0;transition:opacity .25s}
+.feat-card:hover{border-color:rgba(14,165,233,.3);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,8,16,.5)}
+.feat-card:hover::before{opacity:1}
+.feat-ic{font-size:28px;margin-bottom:14px;display:block}
+.feat-title{font-size:15.5px;font-weight:700;color:var(--t1);margin-bottom:8px;letter-spacing:-.2px}
+.feat-sub{font-size:13px;color:var(--t3);line-height:1.6}
+
+.price-card{max-width:380px;margin:0 auto;background:linear-gradient(160deg,rgba(14,165,233,.08),rgba(255,255,255,.02));border:1px solid rgba(14,165,233,.22);border-radius:24px;padding:40px 36px;text-align:left;box-shadow:0 20px 60px rgba(0,8,16,.4)}
+.price-amount{font-size:48px;font-weight:900;letter-spacing:-2.5px;color:var(--t1);margin-bottom:24px;text-align:center}
+.price-amount span{font-size:15px;font-weight:400;color:var(--t3);letter-spacing:0}
+.price-feat{font-size:13.5px;color:#c8e8f5;padding:8px 0;border-bottom:1px solid var(--b)}
+.price-feat:last-of-type{border-bottom:none}
+
+.land-foot{text-align:center;padding:50px 24px 40px;border-top:1px solid var(--b)}
+
+@media (max-width:760px){
+  .land-links,.land-actions{display:none}
+  .land-burger{display:flex}
+  .feat-grid{grid-template-columns:1fr}
+  .hero-cta{flex-direction:column;align-items:center}
+}
+
+
+/* ════ LIGHT THEME ════ */
+[data-theme="light"]{
+  --bg:#f0f9ff;--bg2:#ffffff;--bg3:#f8fbfe;--bg4:#eef6fc;--bg5:#e3f0fa;--bg6:#d6e9f7;
+  --b:rgba(2,44,63,0.08);--b2:rgba(2,44,63,0.13);--b3:rgba(2,44,63,0.2);--b4:rgba(2,44,63,0.28);
+  --t1:#0a2e44;--t2:#3d6e87;--t3:#7fa9bf;--t4:#cce6f5;
+  --sh:0 24px 80px rgba(2,44,63,0.18);--sh2:0 6px 24px rgba(2,44,63,0.12);--sh3:0 2px 8px rgba(2,44,63,0.08);
+}
+[data-theme="light"] body::after{opacity:.15}
+[data-theme="light"] .bub.ub{background:rgba(2,132,199,.06);border-color:rgba(2,132,199,.15)}
+[data-theme="light"] .bub code{background:rgba(2,132,199,.08);color:#0369a1}
+[data-theme="light"] .card,[data-theme="light"] #sp,[data-theme="light"] #md{background:linear-gradient(160deg,#ffffff,#f0f9ff)}
+[data-theme="light"] .hero-title,[data-theme="light"] .land-h2{color:var(--t1)}
+[data-theme="light"] .feat-card,[data-theme="light"] .sc{background:rgba(2,132,199,.03)}
+[data-theme="light"] #land-nav.scrolled{background:rgba(255,255,255,.88)}
+
 </style>
 </head>
 <body>
@@ -495,13 +665,130 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 <div class="blob" id="b4"></div>
 
 <!-- ══ AUTH ══ -->
-<div id="auth-screen" class="screen show">
+<!-- ══ LANDING PAGE ══ -->
+<div id="landing-screen" class="screen show">
+  <nav id="land-nav">
+    <div class="land-nav-inner">
+      <div class="land-brand"><div id="land-logo"></div><span>Atlantis</span></div>
+      <div class="land-links">
+        <a href="#land-features">Features</a>
+        <a href="#land-pricing">Pricing</a>
+        <a href="#land-about">About</a>
+      </div>
+      <div class="land-actions">
+        <button class="land-btn-ghost" onclick="enterAuth('in')">Log in</button>
+        <button class="land-btn-solid" onclick="enterAuth('up')">Sign up</button>
+      </div>
+      <button class="land-burger" onclick="toggleMobileNav()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="land-mobile-menu">
+    <a href="#land-features" onclick="toggleMobileNav()">Features</a>
+    <a href="#land-pricing" onclick="toggleMobileNav()">Pricing</a>
+    <a href="#land-about" onclick="toggleMobileNav()">About</a>
+    <button class="land-btn-ghost" onclick="enterAuth('in')">Log in</button>
+    <button class="land-btn-solid" onclick="enterAuth('up')">Sign up</button>
+  </div>
+
+  <div id="land-scroll">
+    <section class="land-hero">
+      <div class="hero-particles" id="hero-particles"></div>
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <div class="hero-logo" id="hero-logo"></div>
+        <div class="hero-eyebrow">Now in open preview</div>
+        <h1 class="hero-title">Dive into<br/><span class="hero-title-grad">Atlantis</span></h1>
+        <p class="hero-sub">An AI assistant as deep and clear as the ocean itself. Ask anything, speak naturally, create freely — completely free, no limits.</p>
+        <div class="hero-cta">
+          <button class="land-btn-solid lg" onclick="enterAuth('up')">Get started free</button>
+          <button class="land-btn-ghost lg" onclick="enterAuth('in')">I have an account</button>
+        </div>
+        <div class="hero-waveline">
+          <svg viewBox="0 0 1200 80" preserveAspectRatio="none"><path id="wavepath1" d="M0,40 C300,80 900,0 1200,40 L1200,80 L0,80 Z" fill="rgba(14,165,233,0.08)"/><path id="wavepath2" d="M0,50 C300,10 900,90 1200,50 L1200,80 L0,80 Z" fill="rgba(56,189,248,0.06)"/></svg>
+        </div>
+      </div>
+    </section>
+
+    <section class="land-section" id="land-features">
+      <div class="land-section-inner">
+        <div class="land-eyebrow">Features</div>
+        <h2 class="land-h2">Everything you need, nothing you don't</h2>
+        <div class="feat-grid">
+          <div class="feat-card">
+            <div class="feat-ic">&#128172;</div>
+            <div class="feat-title">Natural conversation</div>
+            <div class="feat-sub">Powered by Llama 3.3 — fast, capable, and free to use without limits.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-ic">&#127908;</div>
+            <div class="feat-title">Voice mode</div>
+            <div class="feat-sub">Speak naturally and hear responses aloud with live conversation mode.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-ic">&#128203;</div>
+            <div class="feat-title">Smart history</div>
+            <div class="feat-sub">Search, pin, export, and organize every conversation you've ever had.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-ic">&#128279;</div>
+            <div class="feat-title">Share conversations</div>
+            <div class="feat-sub">Send any chat to a friend via link or email — they get their own copy to explore.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-ic">&#9999;&#65039;</div>
+            <div class="feat-title">Edit & regenerate</div>
+            <div class="feat-sub">Tweak any message and resend, or regenerate any response with one click.</div>
+          </div>
+          <div class="feat-card">
+            <div class="feat-ic">&#127919;</div>
+            <div class="feat-title">Tuned to you</div>
+            <div class="feat-sub">Pick a response style, voice speed, and theme that fits how you work.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="land-section alt" id="land-pricing">
+      <div class="land-section-inner">
+        <div class="land-eyebrow">Pricing</div>
+        <h2 class="land-h2">Free. Actually free.</h2>
+        <p class="land-p" style="max-width:480px;margin:0 auto 36px">No subscriptions, no usage caps, no credit card. Atlantis is free to use, fully and always.</p>
+        <div class="price-card">
+          <div class="price-amount">$0<span>/forever</span></div>
+          <div class="price-feat">&#10003; Unlimited conversations</div>
+          <div class="price-feat">&#10003; Voice mode included</div>
+          <div class="price-feat">&#10003; Full chat history & search</div>
+          <div class="price-feat">&#10003; Share conversations</div>
+          <button class="land-btn-solid lg" style="margin-top:20px;width:100%" onclick="enterAuth('up')">Start chatting</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="land-section" id="land-about">
+      <div class="land-section-inner" style="text-align:center">
+        <div class="land-eyebrow">About</div>
+        <h2 class="land-h2">Built for clarity, not complexity</h2>
+        <p class="land-p" style="max-width:540px;margin:0 auto">Atlantis runs entirely in your browser. Your conversations are stored privately on your own device — nothing is uploaded to a company server beyond what's needed to talk to the AI model itself.</p>
+      </div>
+    </section>
+
+    <footer class="land-foot">
+      <div class="land-brand" style="justify-content:center;margin-bottom:10px"><div id="foot-logo"></div><span>Atlantis</span></div>
+      <div style="color:var(--t3);font-size:12px">&copy; 2026 Atlantis. Dive deeper.</div>
+    </footer>
+  </div>
+</div>
+
+<div id="auth-screen" class="screen">
   <div class="card">
     <div class="card-shine"></div>
     <div class="card-glow"></div>
     <div class="clogo"><div class="clogo-inner" id="auth-logo"></div></div>
     <div class="ctitle" id="at">Welcome back</div>
-    <p class="csub" id="asub">Sign in to continue your conversations with Void.</p>
+    <p class="csub" id="asub">Sign in to continue your conversations with Atlantis.</p>
     <div class="tabs">
       <button class="tab on" onclick="stab('in')">Sign in</button>
       <button class="tab" onclick="stab('up')">Sign up</button>
@@ -557,16 +844,24 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div class="sb-top">
       <div class="sb-brand">
         <div id="sb-logo"></div>
-        <div class="sb-brand-txt">Void</div>
+        <div class="sb-brand-txt">Atlantis</div>
       </div>
     </div>
     <button class="sb-new" onclick="newChat()">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
       New conversation
     </button>
+    <div class="sb-search">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      <input type="text" id="search-input" placeholder="Search conversations..." oninput="filterChats(this.value)"/>
+    </div>
     <div class="sb-hist" id="hist"></div>
     <div class="sb-foot">
       <div class="sb-foot-btns">
+        <button class="sf-btn" onclick="openVoiceMode()" title="Voice conversation">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/></svg>
+          Voice
+        </button>
         <button class="sf-btn" onclick="openSettings()">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           Settings
@@ -579,6 +874,10 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       </div>
       <div class="um" id="um">
         <button class="mi" onclick="openSettings()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>Settings</button>
+        <button class="mi" onclick="openPromptLibrary()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>Prompt Library</button>
+        <button class="mi" onclick="exportChats()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Export Chats</button>
+        <button class="mi" onclick="importChats()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Import Chats</button>
+        <div class="msep"></div>
         <button class="mi" onclick="openMo()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>Upgrade to Pro</button>
         <div class="msep"></div>
         <button class="mi red" onclick="logout()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>Sign out</button>
@@ -607,12 +906,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="emp-logo" id="emp-logo"></div>
         <div class="emp-greeting" id="emp-greet-sub">Good to see you</div>
         <div class="emp-title" id="greet">What can I help with?</div>
-        <p class="emp-sub">Ask me anything — I can think, write, code, and search the web in real time.</p>
+        <p class="emp-sub">Ask anything, speak naturally, or explore the depths — Atlantis listens, thinks, and creates with you.</p>
         <div class="sg">
-          <button class="sc" onclick="go(&quot;What's in the news today?&quot;)"><span class="sc-ic">&#128240;</span><span class="sc-cat">News</span>What's in the news today?</button>
+          <button class="sc" onclick="go(&quot;What's in the news today?&quot;)"><span class="sc-ic">&#127754;</span><span class="sc-cat">Explore</span>What's in the news today?</button>
           <button class="sc" onclick="go('Write a Python function to sort a list by a key')"><span class="sc-ic">&#128187;</span><span class="sc-cat">Code</span>Python: sort a list by key</button>
-          <button class="sc" onclick="go('Help me write a compelling LinkedIn bio')"><span class="sc-ic">&#9999;</span><span class="sc-cat">Writing</span>Write my LinkedIn bio</button>
-          <button class="sc" onclick="go('How do black holes form?')"><span class="sc-ic">&#11835;</span><span class="sc-cat">Learn</span>How do black holes form?</button>
+          <button class="sc" onclick="go('Help me write a compelling LinkedIn bio')"><span class="sc-ic">&#9999;</span><span class="sc-cat">Write</span>Write my LinkedIn bio</button>
+          <button class="sc" onclick="go('How deep is the deepest part of the ocean and what lives there?')"><span class="sc-ic">&#127754;</span><span class="sc-cat">Discover</span>How deep is the ocean really?</button>
         </div>
       </div>
       <div id="mc"></div>
@@ -626,12 +925,15 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
     <div id="ia">
       <div id="ib">
         <span id="wind">Searching web...</span>
-        <textarea id="mta" rows="1" placeholder="Message Void..." oninput="oty(this)" onkeydown="oky(event)"></textarea>
+        <textarea id="mta" rows="1" placeholder="Message Atlantis..." oninput="oty(this)" onkeydown="oky(event)"></textarea>
+        <button id="micbtn" onclick="toggleVoiceInput()" title="Voice input">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2M12 19v3"/></svg>
+        </button>
         <button id="sbtn" onclick="send()">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
         </button>
       </div>
-      <div class="ia-foot">Void runs on Llama 3.3 by Groq. Conversations saved on this device.</div>
+      <div class="ia-foot">Atlantis runs on Llama 3.3 by Groq. Conversations saved on this device.</div>
     </div>
   </div>
 </div>
@@ -662,15 +964,22 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <div class="sp-sec">
         <div class="sp-sec-title">Preferences</div>
         <div class="sp-row">
+          <div class="sp-row-l"><div class="sp-row-title">Appearance</div><div class="sp-row-sub">Choose how Atlantis looks</div></div>
+          <div class="theme-row" style="margin-top:0">
+            <button class="theme-pill" data-theme="dark" onclick="applyTheme('dark')">Dark</button>
+            <button class="theme-pill" data-theme="light" onclick="applyTheme('light')">Light</button>
+          </div>
+        </div>
+        <div class="sp-row">
           <div class="sp-row-l"><div class="sp-row-title">Web search by default</div><div class="sp-row-sub">Automatically search the web for every message</div></div>
           <div class="tog" id="t-web" onclick="toggleSetting('web')"></div>
         </div>
         <div class="sp-row">
-          <div class="sp-row-l"><div class="sp-row-title">Show typing indicator</div><div class="sp-row-sub">Animated dots while Void is generating a response</div></div>
+          <div class="sp-row-l"><div class="sp-row-title">Show typing indicator</div><div class="sp-row-sub">Animated dots while Atlantis is generating a response</div></div>
           <div class="tog on" id="t-typing" onclick="toggleSetting('typing')"></div>
         </div>
         <div class="sp-row">
-          <div class="sp-row-l"><div class="sp-row-title">Sound on response</div><div class="sp-row-sub">Play a soft tone when Void finishes a reply</div></div>
+          <div class="sp-row-l"><div class="sp-row-title">Sound on response</div><div class="sp-row-sub">Play a soft tone when Atlantis finishes a reply</div></div>
           <div class="tog" id="t-sound" onclick="toggleSetting('sound')"></div>
         </div>
         <div class="sp-row">
@@ -682,7 +991,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
       <div class="sp-sec">
         <div class="sp-sec-title">AI Behaviour</div>
         <div class="sp-row">
-          <div class="sp-row-l"><div class="sp-row-title">Response style</div><div class="sp-row-sub">How Void formats and lengths its answers</div></div>
+          <div class="sp-row-l"><div class="sp-row-title">Response style</div><div class="sp-row-sub">How Atlantis formats and lengths its answers</div></div>
           <select class="sp-sel" id="s-style" onchange="savePref('style',this.value)">
             <option value="balanced">Balanced</option>
             <option value="concise">Concise</option>
@@ -693,6 +1002,23 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
         <div class="sp-row">
           <div class="sp-row-l"><div class="sp-row-title">Safety filter</div><div class="sp-row-sub">Block harmful or inappropriate content</div></div>
           <div class="tog on" id="t-safety" onclick="toggleSetting('safety')"></div>
+        </div>
+      </div>
+
+      <div class="sp-sec">
+        <div class="sp-sec-title">Voice</div>
+        <div class="sp-row">
+          <div class="sp-row-l"><div class="sp-row-title">Voice speed</div><div class="sp-row-sub">Playback speed for spoken responses</div></div>
+          <select class="sp-sel" id="s-voicespeed" onchange="savePref('voiceSpeed',parseFloat(this.value))">
+            <option value="0.75">Slow</option>
+            <option value="1" selected>Normal</option>
+            <option value="1.25">Fast</option>
+            <option value="1.5">Very Fast</option>
+          </select>
+        </div>
+        <div class="sp-row">
+          <div class="sp-row-l"><div class="sp-row-title">Auto-read responses</div><div class="sp-row-sub">Automatically speak every AI response aloud</div></div>
+          <div class="tog" id="t-autoread" onclick="toggleSetting('autoread')"></div>
         </div>
       </div>
 
@@ -716,7 +1042,7 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 
       <div class="sp-sec">
         <div class="sp-sec-title">About</div>
-        <div class="sp-row"><div class="kv-row" style="width:100%"><div class="kv-label">Version</div><div class="kv-val">Void AI 2.1</div></div></div>
+        <div class="sp-row"><div class="kv-row" style="width:100%"><div class="kv-label">Version</div><div class="kv-val">Atlantis AI 2.1</div></div></div>
         <div class="sp-row"><div class="kv-row" style="width:100%"><div class="kv-label">Powered by</div><div class="kv-val">Llama 3.3 70B (Groq)</div></div></div>
         <div class="sp-row"><div class="kv-row" style="width:100%"><div class="kv-label">Email verification</div><div class="kv-val">EmailJS</div></div></div>
       </div>
@@ -729,12 +1055,12 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   <div id="md">
     <div class="mh"></div>
     <div id="mo-logo"></div>
-    <div class="mt">Void Pro</div>
-    <p class="ms">Unlimited conversations, real-time web search, and priority speed — no limits, ever.</p>
+    <div class="mt">Atlantis Pro</div>
+    <p class="ms">Unlimited conversations, voice mode, web search, and priority speed — dive deeper, without limits.</p>
     <div class="pc">
       <div class="pv">$9.99<span> / month</span></div>
       <div class="fr"><span class="fi2">&#10022;</span>Unlimited messages, every single day</div>
-      <div class="fr"><span class="fi2">&#127758;</span>Web search included on every message</div>
+      <div class="fr"><span class="fi2">&#127754;</span>Web search included on every message</div>
       <div class="fr-sep"></div>
       <div class="fr"><span class="fi2">&#9889;</span>Priority response speed</div>
       <div class="fr"><span class="fi2">&#128274;</span>No ads — fully private</div>
@@ -745,6 +1071,18 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
   </div>
 </div>
 
+
+<!-- Voice conversation overlay -->
+<div id="voice-overlay">
+  <button class="voice-close" onclick="closeVoiceMode()">&#10005;</button>
+  <div class="voice-rings">
+    <div class="voice-ring vr1"></div>
+    <div class="voice-ring vr2"></div>
+    <div class="voice-ring vr3"></div>
+  </div>
+  <div class="voice-status" id="voice-status">Listening...</div>
+  <div class="voice-transcript" id="voice-transcript">Speak naturally — Atlantis is listening</div>
+</div>
 <div id="toast"></div>
 
 <script>
@@ -752,15 +1090,16 @@ body::after{content:'';position:fixed;inset:0;background-image:url("data:image/s
 //  CONFIG
 // ═══════════════════════════════════════════
 const CFG = {
-  GROQ_KEY:     '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', 
-  EJS_PUBLIC:   'SVoq5vsAqJjG1Tucy',
-  EJS_SERVICE:  'service_leypjvk',
-  EJS_TEMPLATE: 'template_6hltk3p',
+  GROQ_KEY:        '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',
+  GOOGLE_CLIENT_ID:'150961219100-p58fvb7i08ohrktv8g2re2mobrchnm9n.apps.googleusercontent.com',
+  EJS_PUBLIC:      'SVoq5vsAqJjG1Tucy',
+  EJS_SERVICE:     'service_leypjvk',
+  EJS_TEMPLATE:    'template_6hltk3p',
 };
 // ═══════════════════════════════════════════
 
 const FREE_LIMIT=6;
-const SK={U:'va3_u',S:'va3_s',US:'va3_us',CH:'va3_ch',PR:'va3_pr'};
+const SK={U:'atl_u',S:'atl_s',US:'atl_us',CH:'atl_ch',PR:'atl_pr'};
 const BLOCKED=[
   /how\s+to\s+(make|build|create|synthesize).*(bomb|weapon|explosive|poison|meth|fentanyl)/i,
   /(kill|harm|murder|attack)\s+(someone|myself|yourself|people)/i,
@@ -768,7 +1107,7 @@ const BLOCKED=[
   /child\s+(porn|sexual|nude|exploit|abuse)/i,
 ];
 let user=null,msgs=[],webOn=false,busy=false,pendingUser=null,verCode=null,cid=null;
-let prefs={web:false,typing:true,sound:false,compact:false,style:'balanced',safety:true};
+let prefs={web:false,typing:true,sound:false,compact:false,style:'balanced',safety:true,voiceSpeed:1,autoread:false};
 
 const DB={
   get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},
@@ -776,29 +1115,103 @@ const DB={
   del:k=>{try{localStorage.removeItem(k)}catch{}}
 };
 
-function mkL(s,bg='#050508'){
+function mkL(s,bg='#020c14'){
   return`<svg width="${s}" height="${s}" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <ellipse cx="50" cy="50" rx="34" ry="9" fill="none" stroke="white" stroke-width="1.1" transform="rotate(-25 50 50)"/>
-  <path d="M 22 57 Q 32 64 45 61" fill="none" stroke="white" stroke-width="0.8" stroke-linecap="round"/>
-  <path d="M 42 25 C 27 27 20 38 22 50 C 24 61 33 68 46 70 C 37 66 31 58 31 50 C 30 40 36 31 45 29 Z" fill="white"/>
-  <path d="M 45 29 C 54 27 63 29 69 35 C 75 41 77 49 75 57 C 73 64 67 69 59 70 C 66 67 71 61 72 55 C 74 47 72 39 67 34 C 62 29 54 28 47 30 Z" fill="white"/>
-  <path d="M 56 33 C 63 36 67 43 67 50 C 67 57 63 63 57 65 C 62 62 65 57 65 50 C 65 43 62 37 57 34 Z" fill="${bg}"/>
-  <path d="M 42 38 C 45 35 51 35 55 38 C 59 41 60 46 57 50 C 54 54 48 55 44 53 C 40 51 38 46 39 42 C 40 39 41 38 43 37 Z" fill="white"/>
-  <ellipse cx="49" cy="46" rx="6" ry="5.5" fill="${bg}"/>
-  <polygon points="49,39 50.5,43.5 55,43.5 51.5,46 52.8,51 49,48.2 45.2,51 46.5,46 43,43.5 47.5,43.5" fill="white"/>
-  <path d="M 42 25 C 44 22 48 22 50 24" fill="none" stroke="white" stroke-width="1.2" stroke-linecap="round"/>
-  <path d="M 59 70 C 62 71 65 69 66 67" fill="none" stroke="white" stroke-width="1" stroke-linecap="round"/>
+  <defs>
+    <linearGradient id="wave1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7dd3fc"/>
+      <stop offset="100%" stop-color="#0ea5e9"/>
+    </linearGradient>
+    <linearGradient id="wave2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bae6fd"/>
+      <stop offset="100%" stop-color="#38bdf8"/>
+    </linearGradient>
+  </defs>
+  <circle cx="50" cy="50" r="46" fill="${bg}" stroke="url(#wave1)" stroke-width="2" opacity="0.3"/>
+  <path d="M 12 58 Q 24 44 36 58 Q 48 72 60 58 Q 72 44 88 58" fill="none" stroke="url(#wave1)" stroke-width="5" stroke-linecap="round"/>
+  <path d="M 16 70 Q 28 58 40 70 Q 52 82 64 70 Q 76 58 84 68" fill="none" stroke="url(#wave2)" stroke-width="4" stroke-linecap="round" opacity="0.7"/>
+  <path d="M 20 38 Q 30 28 40 38 Q 50 48 60 38 Q 70 28 80 38" fill="none" stroke="url(#wave1)" stroke-width="3.5" stroke-linecap="round" opacity="0.55"/>
+  <circle cx="50" cy="32" r="4.5" fill="url(#wave2)"/>
+  <circle cx="33" cy="40" r="2" fill="#7dd3fc" opacity="0.6"/>
+  <circle cx="68" cy="42" r="1.6" fill="#bae6fd" opacity="0.55"/>
+  <circle cx="50" cy="50" r="46" fill="none" stroke="url(#wave1)" stroke-width="1.2" opacity="0.4"/>
   </svg>`;
 }
-['auth-logo','verify-logo','sb-logo','emp-logo','mo-logo'].forEach((id,i)=>{
-  const el=document.getElementById(id);if(el)el.innerHTML=mkL([56,46,28,68,52][i]);
+['auth-logo','verify-logo','sb-logo','emp-logo','mo-logo','land-logo','hero-logo','foot-logo'].forEach((id,i)=>{
+  const el=document.getElementById(id);if(el)el.innerHTML=mkL([56,46,28,68,52,30,72,26][i]);
 });
 
 // EmailJS
 let ejsOk=false;
-function initEJS(){try{emailjs.init({publicKey:CFG.EJS_PUBLIC});ejsOk=true;console.log('[Void] EmailJS ready');}catch(e){console.warn('[Void] EmailJS:',e);}}
+function initEJS(){try{emailjs.init({publicKey:CFG.EJS_PUBLIC});ejsOk=true;console.log('[Atlantis] EmailJS ready');}catch(e){console.warn('[Atlantis] EmailJS:',e);}}
 if(typeof emailjs!=='undefined')initEJS();
+// Init Google auth after scripts load
+window.addEventListener('load',()=>{
+  setTimeout(initGoogleAuth, 800);
+});
 window.addEventListener('load',()=>{if(!ejsOk&&typeof emailjs!=='undefined')initEJS();});
+
+
+// ─── Landing page ──────────────────────────────────────────────
+function enterAuth(tab){
+  showS('auth-screen');
+  stab(tab);
+}
+function toggleMobileNav(){
+  document.getElementById('land-mobile-menu').classList.toggle('show');
+}
+function initLandingScroll(){
+  const scrollEl=document.getElementById('land-scroll');
+  const nav=document.getElementById('land-nav');
+  if(!scrollEl||!nav)return;
+  scrollEl.addEventListener('scroll',()=>{
+    nav.classList.toggle('scrolled',scrollEl.scrollTop>20);
+    // Parallax wave effect
+    const wp1=document.getElementById('wavepath1');
+    const wp2=document.getElementById('wavepath2');
+    if(wp1&&wp2){
+      const t=scrollEl.scrollTop*0.05;
+      wp1.style.transform=`translateX(${t}px)`;
+      wp2.style.transform=`translateX(${-t*0.7}px)`;
+    }
+  });
+  // Smooth scroll for nav links
+  document.querySelectorAll('.land-links a, #land-mobile-menu a').forEach(a=>{
+    a.addEventListener('click',e=>{
+      e.preventDefault();
+      const target=document.querySelector(a.getAttribute('href'));
+      if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+    });
+  });
+}
+function initParticles(){
+  const container=document.getElementById('hero-particles');
+  if(!container)return;
+  const count=24;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    const size=Math.random()*4+2;
+    p.style.width=size+'px';
+    p.style.height=size+'px';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(Math.random()*12+10)+'s';
+    p.style.animationDelay=(Math.random()*-20)+'s';
+    container.appendChild(p);
+  }
+}
+
+// ─── Light / Dark theme ──────────────────────────────────────────
+function applyTheme(theme){
+  document.documentElement.setAttribute('data-theme',theme);
+  DB.set('atl_theme',theme);
+  const sel=document.querySelectorAll('.theme-pill');
+  sel.forEach(p=>p.classList.toggle('on',p.dataset.theme===theme));
+}
+function loadTheme(){
+  const saved=DB.get('atl_theme')||'dark';
+  applyTheme(saved);
+}
 
 // Screens
 function showS(id){
@@ -831,7 +1244,7 @@ function stab(t){
   document.getElementById('fi').style.display=t==='in'?'block':'none';
   document.getElementById('fu').style.display=t==='up'?'block':'none';
   document.getElementById('at').textContent=t==='in'?'Welcome back':'Create account';
-  document.getElementById('asub').textContent=t==='in'?'Sign in to continue your conversations with Void.':'Join Void and start chatting in seconds.';
+  document.getElementById('asub').textContent=t==='in'?'Sign in to continue your conversations with Atlantis.':'Join Atlantis and start chatting in seconds.';
 }
 function teye(id,btn){const i=document.getElementById(id);i.type=i.type==='password'?'text':'password';btn.innerHTML=i.type==='password'?'&#128065;':'&#128584;';}
 
@@ -860,16 +1273,102 @@ function signup(){
   users[em]=u;saveU(users);pendingUser=u;startVerify(em);
 }
 function gDemo(){
-  const em='demo@gmail.com';const users=getU();
-  if(!users[em]){users[em]={name:'Google User',em,pw:'',verified:true,pro:false,joined:Date.now()};saveU(users);}
-  startSess(users[em]);
+  if(window.google && CFG.GOOGLE_CLIENT_ID && CFG.GOOGLE_CLIENT_ID !== 'YOUR_GOOGLE_CLIENT_ID'){
+    try{
+      google.accounts.id.initialize({
+        client_id: CFG.GOOGLE_CLIENT_ID,
+        callback: handleGoogleCB,
+        auto_select: false,
+        cancel_on_tap_outside: true,
+      });
+    }catch(e){
+      console.error('[Atlantis] Google init failed:',e);
+      setAl('ae','Google sign-in could not initialize. Check your internet connection and try again.','e');
+      return;
+    }
+
+    // Always show a real, clickable Google button — skip the unreliable One Tap auto-prompt
+    const div=document.createElement('div');
+    div.id='google-signin-overlay';
+    div.style.cssText='position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.82);backdrop-filter:blur(12px)';
+    div.onclick=e=>{if(e.target===div)div.remove()};
+    const box=document.createElement('div');
+    box.style.cssText='background:var(--bg2);border:1px solid var(--b2);border-radius:18px;padding:36px 32px;text-align:center;min-width:300px;box-shadow:var(--sh)';
+    box.innerHTML='<div style="font-size:16px;font-weight:700;color:var(--t1);margin-bottom:22px">Sign in with Google</div>';
+    const btnDiv=document.createElement('div');
+    btnDiv.id='google-btn-container';
+    btnDiv.style.display='flex';
+    btnDiv.style.justifyContent='center';
+    box.appendChild(btnDiv);
+    const errMsg=document.createElement('div');
+    errMsg.id='google-btn-err';
+    errMsg.style.cssText='font-size:11.5px;color:#fca5a5;margin-top:14px;max-width:260px;line-height:1.5;display:none';
+    box.appendChild(errMsg);
+    const cancel=document.createElement('button');
+    cancel.textContent='Cancel';
+    cancel.style.cssText='margin-top:16px;background:transparent;border:none;color:var(--t3);cursor:pointer;font-family:Inter,sans-serif;font-size:13px';
+    cancel.onclick=()=>div.remove();
+    box.appendChild(cancel);
+    div.appendChild(box);
+    document.body.appendChild(div);
+
+    try{
+      google.accounts.id.renderButton(btnDiv,{
+        theme:'filled_black',shape:'pill',size:'large',text:'signin_with',width:'260'
+      });
+      // If Google's library silently fails to render (bad origin, blocked script, etc),
+      // the container stays empty — detect that and show a clear explanation.
+      setTimeout(()=>{
+        if(btnDiv.children.length===0){
+          errMsg.style.display='block';
+          errMsg.textContent="Google's button didn't load. This usually means this site's URL isn't added to the Client ID's Authorized JavaScript origins in Google Cloud Console.";
+        }
+      },1200);
+    }catch(e){
+      console.error('[Atlantis] Google renderButton failed:',e);
+      errMsg.style.display='block';
+      errMsg.textContent='Google sign-in failed to load: '+(e.message||'unknown error');
+    }
+  } else {
+    const em='demo@gmail.com';const users=getU();
+    if(!users[em]){users[em]={name:'Google User',em,pw:'',verified:true,pro:false,joined:Date.now()};saveU(users);}
+    startSess(users[em]);
+  }
+}
+
+function handleGoogleCB(response){
+  try{
+    // Decode JWT payload
+    const parts=response.credential.split('.');
+    const payload=JSON.parse(atob(parts[1].replace(/-/g,'+').replace(/_/g,'/')));
+    const em=payload.email.toLowerCase();
+    const name=payload.name||payload.email.split('@')[0];
+    const pic=payload.picture||'';
+    const users=getU();
+    if(!users[em]){
+      users[em]={name,em,pw:'',verified:true,pro:false,joined:Date.now(),google:true,pic};
+      saveU(users);
+    } else {
+      // Update name/pic in case they changed
+      users[em].verified=true;
+      users[em].google=true;
+      if(pic)users[em].pic=pic;
+      saveU(users);
+    }
+    // Close the sign-in overlay if it's open
+    document.getElementById('google-signin-overlay')?.remove();
+    startSess(users[em]);
+  }catch(e){
+    console.error('[Atlantis] Google CB error:',e);
+    setAl('ae','Google sign-in failed. Please try email instead.','e');
+  }
 }
 
 // Email verify
 function genCode(){return String(Math.floor(100000+Math.random()*900000))}
 async function startVerify(em){
   verCode=genCode();
-  console.log(`%c[Void] Code for ${em}: ${verCode}`,'color:#a78bfa;font-size:16px;font-weight:900');
+  console.log(`%c[Atlantis] Code for ${em}: ${verCode}`,'color:#a78bfa;font-size:16px;font-weight:900');
   document.getElementById('vel').textContent=em;
   for(let i=0;i<6;i++){const d=document.getElementById('d'+i);if(d){d.value='';d.classList.remove('filled');}}
   clr('ve');showS('verify-screen');
@@ -881,10 +1380,10 @@ async function doSendEmail(toEmail,toName,code){
   if(!ejsOk&&typeof emailjs!=='undefined')initEJS();
   if(!ejsOk){setAl('vi',`Email service unavailable. Your code: ${code}`,'i');return;}
   try{
-    await emailjs.send(CFG.EJS_SERVICE,CFG.EJS_TEMPLATE,{to_email:toEmail,to_name:toName,code,app_name:'Void AI'});
+    await emailjs.send(CFG.EJS_SERVICE,CFG.EJS_TEMPLATE,{to_email:toEmail,to_name:toName,code,app_name:'Atlantis AI'});
     setAl('vi',`Email sent to ${toEmail}. Check your inbox and spam folder.`,'i');
   }catch(err){
-    console.error('[Void] Email error:',err);
+    console.error('[Atlantis] Email error:',err);
     setAl('vi',`Could not send email (${err?.text||err?.message||'error'}). Your code: ${code}`,'i');
   }
 }
@@ -906,12 +1405,12 @@ function verify(){
   if(entered.length<6){setAl('ve','Please enter the full 6-digit code.','e');return}
   if(entered!==verCode){setAl('ve','That code is incorrect. Please try again.','e');return}
   const users=getU();
-  if(pendingUser){pendingUser.verified=true;users[pendingUser.em]=pendingUser;saveU(users);toast('Email verified! Welcome to Void.','success');startSess(pendingUser);}
+  if(pendingUser){pendingUser.verified=true;users[pendingUser.em]=pendingUser;saveU(users);toast('Email verified! Welcome to Atlantis.','success');startSess(pendingUser);}
 }
 async function resend(){
   if(!pendingUser)return;
   verCode=genCode();
-  console.log(`%c[Void] New code: ${verCode}`,'color:#a78bfa;font-weight:900');
+  console.log(`%c[Atlantis] New code: ${verCode}`,'color:#a78bfa;font-weight:900');
   clr('ve');
   await doSendEmail(pendingUser.em,pendingUser.name||'there',verCode);
   toast('New code sent','info');
@@ -919,8 +1418,18 @@ async function resend(){
 
 // Session
 function startSess(u){user=u;DB.set(SK.S,{em:u.em});loadPrefs();initApp();}
-function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';closeMu();closeSettings();showS('auth-screen');}
-(function(){const s=DB.get(SK.S);if(!s)return showS('auth-screen');const u=getU()[s.em];if(u&&u.verified){user=u;loadPrefs();initApp();}else showS('auth-screen');})();
+function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';closeMu();closeSettings();showS('landing-screen');setTimeout(()=>{initLandingScroll();if(!document.querySelector('.particle'))initParticles();},50);}
+(function(){
+  loadTheme();
+  const s=DB.get(SK.S);
+  if(s){
+    const u=getU()[s.em];
+    if(u&&u.verified){user=u;loadPrefs();initApp();return;}
+  }
+  // Not logged in - show landing page, init its effects
+  initLandingScroll();
+  initParticles();
+})();
 
 // Prefs
 function loadPrefs(){const saved=DB.get(SK.PR+'_'+(user?.em||''));if(saved)prefs={...prefs,...saved};if(prefs.web){webOn=true;document.getElementById('wbt').classList.add('on');document.getElementById('wind').classList.add('show');}}
@@ -935,6 +1444,22 @@ function toggleSetting(k){
 }
 
 // App init
+function initGoogleAuth(){
+  if(window.google && CFG.GOOGLE_CLIENT_ID && CFG.GOOGLE_CLIENT_ID!=='YOUR_GOOGLE_CLIENT_ID'){
+    try{
+      google.accounts.id.initialize({
+        client_id:CFG.GOOGLE_CLIENT_ID,
+        callback:handleGoogleCB,
+        auto_select:false,
+      });
+      // Show One Tap if not logged in
+      if(!user){
+        google.accounts.id.prompt();
+      }
+    }catch(e){console.warn('[Atlantis] Google init:',e);}
+  }
+}
+
 function initApp(){
   const first=user.name?user.name.split(' ')[0]:'there';
   const hr=new Date().getHours();
@@ -947,7 +1472,7 @@ function initApp(){
   document.getElementById('uname').textContent=user.name||'User';
   document.getElementById('uemail').textContent=user.em||'';
   updUI();renderHist();showApp();
-  ['web','typing','sound','compact','safety'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
+  ['web','typing','sound','compact','safety','autoread'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
   const ss=document.getElementById('s-style');if(ss)ss.value=prefs.style||'balanced';
 }
 
@@ -972,8 +1497,10 @@ function openSettings(){
   const pct=Math.min((totalBytes/(5*1024*1024))*100,100);
   document.getElementById('sp-bar').style.width=pct+'%';
   document.getElementById('sp-storage').textContent=`${kb} KB used of 5 MB available`;
-  ['web','typing','sound','compact','safety'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
+  ['web','typing','sound','compact','safety','autoread'].forEach(k=>{const el=document.getElementById('t-'+k);if(el)el.classList.toggle('on',prefs[k]);});
   const ss=document.getElementById('s-style');if(ss)ss.value=prefs.style||'balanced';
+  const vs=document.getElementById('s-voicespeed');if(vs)vs.value=prefs.voiceSpeed||1;
+  applyTheme(DB.get('atl_theme')||'dark');
   document.getElementById('sov').classList.add('show');
 }
 function closeSettings(){document.getElementById('sov').classList.remove('show')}
@@ -991,28 +1518,50 @@ function saveChat(){
   if(idx>=0)chats[idx]=d;else chats.unshift(d);
   sChats(chats);renderHist();
 }
-function renderHist(){
+function renderHist(searchQuery){
   const el=document.getElementById('hist');if(!user){el.innerHTML='';return}
-  const chats=gChats();
-  if(!chats.length){el.innerHTML='<div style="font-size:12px;color:var(--t3);padding:18px 12px;text-align:center;line-height:1.9">No conversations yet.<br>Start one above.</div>';return;}
+  let chats=gChats();
+  const pins=getPins();
+
+  if(searchQuery){
+    chats=chats.filter(c=>c.title.toLowerCase().includes(searchQuery)||(c.messages||[]).some(m=>m.content.toLowerCase().includes(searchQuery)));
+  }
+
+  if(!chats.length){
+    el.innerHTML=`<div style="font-size:12px;color:var(--t3);padding:18px 12px;text-align:center;line-height:1.9">${searchQuery?'No matching conversations.':'No conversations yet.<br>Start one above.'}</div>`;
+    return;
+  }
+
+  const pinned=chats.filter(c=>pins.includes(c.id));
+  const unpinned=chats.filter(c=>!pins.includes(c.id));
+
+  let h='';
+  if(pinned.length && !searchQuery){
+    h+='<div class="sb-sect">Pinned</div>';
+    pinned.forEach(c=>h+=chatItemHtml(c,pins));
+  }
+
   const now=Date.now();
   const grps={Today:[],Yesterday:[],'This week':[],Older:[]};
-  chats.forEach(c=>{const a=now-c.ts;if(a<86400000)grps.Today.push(c);else if(a<172800000)grps.Yesterday.push(c);else if(a<604800000)grps['This week'].push(c);else grps.Older.push(c);});
-  let h='';
+  unpinned.forEach(c=>{const a=now-c.ts;if(a<86400000)grps.Today.push(c);else if(a<172800000)grps.Yesterday.push(c);else if(a<604800000)grps['This week'].push(c);else grps.Older.push(c);});
   Object.entries(grps).forEach(([l,g])=>{
     if(!g.length)return;
     h+=`<div class="sb-sect">${l}</div>`;
-    g.forEach(c=>{
-      h+=`<div class="ci${c.id===cid?' on':''}" onclick="loadChat('${c.id}')">
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;color:var(--t3)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span class="ci-txt">${esc(c.title)}</span>
-        <button class="ci-del" onclick="delChat(event,'${c.id}')" title="Delete">&#10005;</button>
-      </div>`;
-    });
+    g.forEach(c=>h+=chatItemHtml(c,pins));
   });
   el.innerHTML=h;
 }
-function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach(m=>renderM(m.role,m.content));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
+
+function chatItemHtml(c,pins){
+  const isPinned=pins.includes(c.id);
+  return `<div class="ci${c.id===cid?' on':''}" onclick="loadChat('${c.id}')">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex-shrink:0;color:var(--t3)"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+    <span class="ci-txt">${esc(c.title)}</span>
+    <button class="ci-pin${isPinned?' pinned':''}" onclick="togglePin(event,'${c.id}')" title="${isPinned?'Unpin':'Pin'}">&#128204;</button>
+    <button class="ci-del" onclick="delChat(event,'${c.id}')" title="Delete">&#10005;</button>
+  </div>`;
+}
+function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
 function delChat(e,id){e.stopPropagation();sChats(gChats().filter(c=>c.id!==id));if(cid===id)newChat();else renderHist();}
 function newChat(){cid='c_'+Date.now();msgs=[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';renderHist();}
 
@@ -1025,7 +1574,7 @@ function updUI(){
   if(user?.pro){chip.textContent='Pro';chip.className='uchip pro';pb.textContent='Pro';pb.className='pbt paid';}
   else{chip.textContent=`${r} / ${FREE_LIMIT} free`;chip.className='uchip'+(r<=2?' warn':'');pb.textContent='Upgrade';pb.className='pbt';}
   document.getElementById('lb').classList.toggle('show',!user?.pro&&r<=0);
-  const ta=document.getElementById('mta');ta.disabled=!user?.pro&&r<=0;ta.placeholder=!user?.pro&&r<=0?'Upgrade to keep chatting...':'Message Void...';
+  const ta=document.getElementById('mta');ta.disabled=!user?.pro&&r<=0;ta.placeholder=!user?.pro&&r<=0?'Upgrade to keep chatting...':'Message Atlantis...';
 }
 
 // Web
@@ -1034,7 +1583,7 @@ function tweb(){webOn=!webOn;prefs.web=webOn;savePrefs();document.getElementById
 // Input
 function oty(el){el.style.height='auto';el.style.height=Math.min(el.scrollHeight,200)+'px';document.getElementById('sbtn').className=el.value.trim()&&!busy?'on':'';}
 function oky(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}}
-function scr(){document.getElementById('mw').scrollTop=99999}
+function scr(){const mw=document.getElementById('mw');mw.scrollTo({top:mw.scrollHeight,behavior:'smooth'});}
 
 // Markdown
 function esc(t){return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}
@@ -1059,27 +1608,130 @@ function md(text){
 function cpCode(id){const el=document.getElementById(id);if(el)navigator.clipboard.writeText(el.textContent).then(()=>toast('Copied to clipboard','success'));}
 
 // Render
-function renderM(role,content,cls){
+function renderM(role,content,cls,msgIdx){
   document.getElementById('emp').style.display='none';
   const mc=document.getElementById('mc');
   const row=document.createElement('div');row.className=`mr${role==='user'?' u':''}`;
+  row.dataset.idx=msgIdx!==undefined?msgIdx:msgs.length-1;
   if(prefs.compact)row.style.marginBottom='16px';
   const av=document.createElement('div');av.className=`av ${role==='user'?'u':'b'}`;
   if(role==='assistant'){av.innerHTML=mkL(34);}
   else{av.textContent=user?.name?user.name.split(' ').map(w=>w[0]).join('').toUpperCase().slice(0,2):'U';}
   const body=document.createElement('div');body.className='mb';
-  if(role==='assistant'){const w=document.createElement('div');w.className='mwho';w.textContent='Void';body.appendChild(w);}
+  if(role==='assistant'){const w=document.createElement('div');w.className='mwho';w.textContent='Atlantis';body.appendChild(w);}
   const bub=document.createElement('div');
   bub.className=`bub${role==='user'?' ub':''}${cls?' '+cls:''}`;
   bub.innerHTML=role==='user'?`<p>${esc(content)}</p>`:md(content);
-  body.appendChild(bub);row.appendChild(av);row.appendChild(body);
+  body.appendChild(bub);
+
+  // Action bar (copy / edit / regenerate / delete / speak)
+  const actions=document.createElement('div');
+  actions.className='msg-actions';
+  const idx=row.dataset.idx;
+  let actHtml=`<button class="ma-btn" onclick="copyMsg(this,${idx})" title="Copy"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>`;
+  if(role==='user'){
+    actHtml+=`<button class="ma-btn" onclick="editMsg(${idx})" title="Edit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></button>`;
+  } else {
+    actHtml+=`<button class="ma-btn" onclick="regenMsg(${idx})" title="Regenerate"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg></button>`;
+    actHtml+=`<button class="ma-btn" onclick="speakMsg(${idx},this)" title="Read aloud"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg></button>`;
+  }
+  actHtml+=`<button class="ma-btn ma-del" onclick="deleteMsg(${idx})" title="Delete"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></svg></button>`;
+  actions.innerHTML=actHtml;
+  body.appendChild(actions);
+
+  row.appendChild(av);row.appendChild(body);
   mc.appendChild(row);scr();
+}
+
+function copyMsg(btn,idx){
+  const m=msgs[idx];if(!m)return;
+  navigator.clipboard.writeText(m.content).then(()=>{
+    toast('Copied to clipboard','success');
+  });
+}
+
+function editMsg(idx){
+  const m=msgs[idx];if(!m||m.role!=='user')return;
+  const row=document.querySelector(`.mr[data-idx="${idx}"]`);
+  if(!row)return;
+  const bub=row.querySelector('.bub');
+  const ta=document.createElement('textarea');
+  ta.className='edit-ta';
+  ta.value=m.content;
+  bub.replaceWith(ta);
+  ta.focus();
+  ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';
+  ta.oninput=()=>{ta.style.height='auto';ta.style.height=ta.scrollHeight+'px';};
+
+  const actions=row.querySelector('.msg-actions');
+  actions.innerHTML=`<button class="ma-btn ma-save" onclick="saveEdit(${idx})">Save & Submit</button><button class="ma-btn" onclick="cancelEdit(${idx})">Cancel</button>`;
+}
+
+function cancelEdit(idx){
+  const row=document.querySelector(`.mr[data-idx="${idx}"]`);
+  if(!row)return;
+  document.getElementById('mc').innerHTML='';
+  msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
+}
+
+async function saveEdit(idx){
+  const row=document.querySelector(`.mr[data-idx="${idx}"]`);
+  const ta=row?.querySelector('.edit-ta');
+  if(!ta)return;
+  const newText=ta.value.trim();
+  if(!newText)return;
+  // Truncate history after this point and resend
+  msgs=msgs.slice(0,idx);
+  document.getElementById('mc').innerHTML='';
+  msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
+  await send(newText);
+}
+
+function deleteMsg(idx){
+  if(!confirm('Delete this message?'))return;
+  msgs.splice(idx,1);
+  document.getElementById('mc').innerHTML='';
+  msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
+  saveChat();
+}
+
+async function regenMsg(idx){
+  // Find the preceding user message and resend
+  let userIdx=idx-1;
+  while(userIdx>=0 && msgs[userIdx].role!=='user')userIdx--;
+  if(userIdx<0)return;
+  const userText=msgs[userIdx].content;
+  msgs=msgs.slice(0,userIdx);
+  document.getElementById('mc').innerHTML='';
+  msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));
+  await send(userText);
+}
+
+// ─── Voice output (browser-native TTS) ───────────────────────
+let currentUtterance=null;
+function speakMsg(idx,btn){
+  const m=msgs[idx];if(!m)return;
+  if(currentUtterance && speechSynthesis.speaking){
+    speechSynthesis.cancel();
+    currentUtterance=null;
+    if(btn)btn.classList.remove('speaking');
+    return;
+  }
+  const utter=new SpeechSynthesisUtterance(m.content.replace(/[#*`_]/g,''));
+  utter.rate=prefs.voiceSpeed||1;
+  const voices=speechSynthesis.getVoices();
+  const preferred=voices.find(v=>v.name.includes(prefs.voiceName||'')) || voices.find(v=>v.lang.startsWith('en'));
+  if(preferred)utter.voice=preferred;
+  utter.onend=()=>{if(btn)btn.classList.remove('speaking');currentUtterance=null;};
+  if(btn)btn.classList.add('speaking');
+  currentUtterance=utter;
+  speechSynthesis.speak(utter);
 }
 function showTyping(){
   if(!prefs.typing)return;
   const mc=document.getElementById('mc');
   const row=document.createElement('div');row.className='tr';row.id='tr';
-  row.innerHTML=`<div class="av b">${mkL(34)}</div><div class="mb"><div class="mwho">Void</div><div class="dots">${webOn?'<span class="stag">Searching web...</span>':''}<div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
+  row.innerHTML=`<div class="av b">${mkL(34)}</div><div class="mb"><div class="mwho">Atlantis</div><div class="dots">${webOn?'<span class="stag">Searching web...</span>':''}<div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>`;
   mc.appendChild(row);scr();
 }
 function rmT(){const e=document.getElementById('tr');if(e)e.remove();}
@@ -1089,7 +1741,7 @@ function playSound(){
 }
 function buildSys(){
   const styles={balanced:'Be warm, accurate, and concise.',concise:'Be extremely brief — one or two short paragraphs max.',detailed:'Be thorough, comprehensive, and well-structured in your answers.',friendly:'Be conversational, encouraging, and upbeat.'};
-  return`You are Void, a brilliant and safe AI assistant. ${styles[prefs.style]||styles.balanced} Use markdown when it helps clarity — headers, bullets, code blocks. Never help with illegal activity, self-harm, weapons, or harmful content. If someone seems in crisis, respond with empathy and direct them to call or text 988.`;
+  return`You are Atlantis, a brilliant and safe AI assistant. ${styles[prefs.style]||styles.balanced} Use markdown when it helps clarity — headers, bullets, code blocks. Never help with illegal activity, self-harm, weapons, or harmful content. If someone seems in crisis, respond with empathy and direct them to call or text 988.`;
 }
 async function callAI(history,text){
   const key=CFG.GROQ_KEY.trim();
@@ -1142,19 +1794,19 @@ async function send(ov){
   if(!text||busy||!user)return;
   if(!user.pro&&rem()<=0){openMo();return}
   if(prefs.safety&&BLOCKED.some(p=>p.test(text))){
-    msgs.push({role:'user',content:text});renderM('user',text);
+    msgs.push({role:'user',content:text});renderM('user',text,null,msgs.length-1);
     const s="I can't help with that. If you're going through something difficult, please reach out — call or text 988 any time. You're not alone.";
-    msgs.push({role:'assistant',content:s});renderM('assistant',s,'warn');
+    msgs.push({role:'assistant',content:s});renderM('assistant',s,'warn',msgs.length-1);
     ta.value='';ta.style.height='auto';document.getElementById('sbtn').className='';saveChat();return;
   }
   if(!cid)cid='c_'+Date.now();
-  msgs.push({role:'user',content:text});renderM('user',text);
+  msgs.push({role:'user',content:text});renderM('user',text,null,msgs.length-1);
   ta.value='';ta.style.height='auto';document.getElementById('sbtn').className='';
   busy=true;showTyping();
   if(!user.pro){const u=getUsg();setUsg({c:u.c+1,d:u.d});updUI();}
   try{
     const r=await callAI(msgs.slice(0,-1),text);
-    rmT();msgs.push({role:'assistant',content:r});renderM('assistant',r);saveChat();playSound();
+    rmT();msgs.push({role:'assistant',content:r});renderM('assistant',r,null,msgs.length-1);saveChat();playSound();if(prefs.autoread){const u=new SpeechSynthesisUtterance(r.replace(/[#*`_]/g,''));u.rate=prefs.voiceSpeed||1;speechSynthesis.speak(u);}
   }catch(err){
     rmT();
     let m;
@@ -1173,7 +1825,7 @@ async function send(ov){
     }else{
       m=`Something went wrong: ${err.message}`;
     }
-    msgs.push({role:'assistant',content:m});renderM('assistant',m,'err');
+    msgs.push({role:'assistant',content:m});renderM('assistant',m,'err',msgs.length-1);
   }finally{busy=false;}
 }
 function go(t){send(t)}
@@ -1184,6 +1836,201 @@ function doPro(){
   const users=getU();user.pro=true;users[user.em]=user;saveU(users);
   updUI();closeMo();toast('Welcome to Pro!','success');
   const badge=document.getElementById('sp-badge');if(badge)badge.textContent='Pro plan';
+}
+
+// ─── Voice Input (Web Speech API) ────────────────────────────
+let recognition=null,isRecording=false;
+function initRecognition(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR)return null;
+  const r=new SR();
+  r.continuous=false;
+  r.interimResults=true;
+  r.lang='en-US';
+  return r;
+}
+function toggleVoiceInput(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('Voice input is not supported in this browser. Try Chrome.','error');return;}
+  if(isRecording){
+    if(recognition)recognition.stop();
+    return;
+  }
+  recognition=initRecognition();
+  if(!recognition)return;
+  const micBtn=document.getElementById('micbtn');
+  const ta=document.getElementById('mta');
+
+  recognition.onstart=()=>{isRecording=true;micBtn.classList.add('recording');};
+  recognition.onresult=(e)=>{
+    let transcript='';
+    for(let i=0;i<e.results.length;i++)transcript+=e.results[i][0].transcript;
+    ta.value=transcript;
+    oty(ta);
+  };
+  recognition.onerror=(e)=>{
+    console.warn('[Atlantis] Speech recognition error:',e.error);
+    if(e.error==='not-allowed')toast('Microphone access denied. Please allow it in browser settings.','error');
+    else if(e.error!=='aborted')toast('Voice input error: '+e.error,'error');
+  };
+  recognition.onend=()=>{isRecording=false;micBtn.classList.remove('recording');};
+  recognition.start();
+}
+
+// ─── Live Voice Conversation Mode ─────────────────────────────
+let voiceModeActive=false,voiceRecognition=null;
+function openVoiceMode(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('Voice mode needs Chrome or Edge browser.','error');return;}
+  voiceModeActive=true;
+  document.getElementById('voice-overlay').classList.add('show');
+  startVoiceListening();
+}
+function closeVoiceMode(){
+  voiceModeActive=false;
+  if(voiceRecognition)voiceRecognition.stop();
+  speechSynthesis.cancel();
+  document.getElementById('voice-overlay').classList.remove('show');
+}
+function startVoiceListening(){
+  if(!voiceModeActive)return;
+  voiceRecognition=initRecognition();
+  if(!voiceRecognition)return;
+  document.getElementById('voice-status').textContent='Listening...';
+  document.getElementById('voice-transcript').textContent='Speak naturally — Atlantis is listening';
+
+  voiceRecognition.onresult=async(e)=>{
+    const transcript=e.results[0][0].transcript;
+    document.getElementById('voice-transcript').textContent=transcript;
+  };
+  voiceRecognition.onend=async()=>{
+    const lastResult=voiceRecognition._lastTranscript;
+  };
+  voiceRecognition.onresult=(e)=>{
+    let t='';for(let i=0;i<e.results.length;i++)t+=e.results[i][0].transcript;
+    document.getElementById('voice-transcript').textContent=t;
+    voiceRecognition._lastTranscript=t;
+  };
+  voiceRecognition.onspeechend=async()=>{
+    voiceRecognition.stop();
+    const text=voiceRecognition._lastTranscript;
+    if(text && text.trim() && voiceModeActive){
+      document.getElementById('voice-status').textContent='Thinking...';
+      await voiceSend(text.trim());
+    } else if(voiceModeActive){
+      startVoiceListening();
+    }
+  };
+  voiceRecognition.onerror=(e)=>{
+    if(e.error==='not-allowed'){toast('Microphone access denied.','error');closeVoiceMode();}
+  };
+  voiceRecognition.start();
+}
+async function voiceSend(text){
+  if(!cid)cid='c_'+Date.now();
+  msgs.push({role:'user',content:text});
+  if(!user.pro){const u=getUsg();setUsg({c:u.c+1,d:u.d});updUI();}
+  try{
+    const r=await callAI(msgs.slice(0,-1),text);
+    msgs.push({role:'assistant',content:r});
+    saveChat();
+    document.getElementById('voice-status').textContent='Speaking...';
+    document.getElementById('voice-transcript').textContent=r.slice(0,200);
+    const utter=new SpeechSynthesisUtterance(r.replace(/[#*`_]/g,''));
+    utter.rate=prefs.voiceSpeed||1;
+    utter.onend=()=>{if(voiceModeActive)startVoiceListening();};
+    speechSynthesis.speak(utter);
+  }catch(err){
+    document.getElementById('voice-status').textContent='Error — try again';
+    setTimeout(()=>{if(voiceModeActive)startVoiceListening();},1500);
+  }
+}
+
+// ─── Chat search/filter ────────────────────────────────────────
+function filterChats(query){
+  const q=query.trim().toLowerCase();
+  renderHist(q);
+}
+
+// ─── Pin conversations ──────────────────────────────────────────
+function getPins(){return DB.get('atl_pins_'+(user?.em||''))||[];}
+function savePins(p){DB.set('atl_pins_'+(user?.em||''),p);}
+function togglePin(e,id){
+  e.stopPropagation();
+  let pins=getPins();
+  if(pins.includes(id))pins=pins.filter(p=>p!==id);
+  else pins.push(id);
+  savePins(pins);
+  renderHist();
+}
+
+// ─── Prompt Library ──────────────────────────────────────────
+const PROMPT_LIBRARY=[
+  {cat:'Writing',text:'Write a professional email declining a meeting invite politely'},
+  {cat:'Writing',text:'Improve the clarity and tone of this paragraph: [paste text]'},
+  {cat:'Code',text:'Review this code for bugs and suggest improvements: [paste code]'},
+  {cat:'Code',text:'Explain what this function does step by step: [paste code]'},
+  {cat:'Research',text:'Summarize the key arguments for and against [topic]'},
+  {cat:'Research',text:'Compare and contrast [A] and [B] across 3 key dimensions'},
+  {cat:'Brainstorm',text:'Give me 10 creative names for a [type of business]'},
+  {cat:'Brainstorm',text:'What are some unconventional solutions to [problem]?'},
+  {cat:'Learning',text:'Explain [complex topic] like I\'m a complete beginner'},
+  {cat:'Learning',text:'Quiz me on [subject] with 5 questions of increasing difficulty'},
+];
+function openPromptLibrary(){
+  closeMu();
+  let html=PROMPT_LIBRARY.map(p=>`<div class="lib-item" onclick="usePrompt('${p.text.replace(/'/g,"\\'")}')"><div class="lib-cat">${p.cat}</div>${esc(p.text)}</div>`).join('');
+  document.getElementById('sp-title-text')?.remove();
+  const sp=document.getElementById('sp');
+  const existing=document.getElementById('prompt-lib-section');
+  if(existing){existing.remove();}
+  openSettings();
+  const body=document.querySelector('.sp-body');
+  const sec=document.createElement('div');
+  sec.className='sp-sec';sec.id='prompt-lib-section';
+  sec.innerHTML=`<div class="sp-sec-title">Prompt Library</div>${html}`;
+  body.insertBefore(sec,body.firstChild);
+}
+function usePrompt(text){
+  closeSettings();
+  const ta=document.getElementById('mta');
+  ta.value=text;
+  oty(ta);
+  ta.focus();
+}
+
+// ─── Export / Import chats ───────────────────────────────────
+function exportChats(){
+  const chats=gChats();
+  const blob=new Blob([JSON.stringify(chats,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='atlantis-chats-'+new Date().toISOString().slice(0,10)+'.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  toast('Chats exported','success');
+}
+function importChats(){
+  const input=document.createElement('input');
+  input.type='file';input.accept='.json';
+  input.onchange=(e)=>{
+    const file=e.target.files[0];if(!file)return;
+    const reader=new FileReader();
+    reader.onload=(ev)=>{
+      try{
+        const imported=JSON.parse(ev.target.result);
+        if(Array.isArray(imported)){
+          const existing=gChats();
+          const merged=[...imported,...existing];
+          sChats(merged);
+          renderHist();
+          toast(`Imported ${imported.length} conversations`,'success');
+        }
+      }catch(err){toast('Invalid file format','error');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
 }
 </script>
 </body>
