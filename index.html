@@ -1110,9 +1110,9 @@ let user=null,msgs=[],webOn=false,busy=false,pendingUser=null,verCode=null,cid=n
 let prefs={web:false,typing:true,sound:false,compact:false,style:'balanced',safety:true,voiceSpeed:1,autoread:false};
 
 const DB={
-  get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch{return null}},
-  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}},
-  del:k=>{try{localStorage.removeItem(k)}catch{}}
+  get:k=>{try{return JSON.parse(localStorage.getItem(k))}catch(e){console.warn('[Void] DB read failed for key:',k,e);return null}},
+  set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){console.error('[Void] DB write failed for key:',k,e);if(e.name==='QuotaExceededError')toast('Storage full — please clear old conversations.','error');}},
+  del:k=>{try{localStorage.removeItem(k)}catch(e){console.warn('[Void] DB delete failed for key:',k,e)}}
 };
 
 function mkL(s,bg='#020c14'){
@@ -1423,8 +1423,11 @@ function logout(){DB.del(SK.S);user=null;msgs=[];cid=null;document.getElementByI
   loadTheme();
   const s=DB.get(SK.S);
   if(s){
-    const u=getU()[s.em];
+    const users=getU();
+    const u=users[s.em];
     if(u&&u.verified){user=u;loadPrefs();initApp();return;}
+    if(s.em&&!u)console.warn('[Void] Session references unknown account:',s.em);
+    DB.del(SK.S);
   }
   // Not logged in - show landing page, init its effects
   initLandingScroll();
@@ -1492,7 +1495,7 @@ function openSettings(){
   document.getElementById('sp-badge').textContent=user?.pro?'Pro plan':'Free plan';
   const chats=gChats();
   document.getElementById('sp-count').textContent=`${chats.length} chat${chats.length!==1?'s':''}`;
-  let totalBytes=0;try{for(let k in localStorage)totalBytes+=localStorage[k].length*2;}catch{}
+  let totalBytes=0;try{for(let k in localStorage)totalBytes+=localStorage[k].length*2;}catch(e){console.warn('[Void] Storage calculation error:',e)}
   const kb=(totalBytes/1024).toFixed(1);
   const pct=Math.min((totalBytes/(5*1024*1024))*100,100);
   document.getElementById('sp-bar').style.width=pct+'%';
@@ -1561,7 +1564,7 @@ function chatItemHtml(c,pins){
     <button class="ci-del" onclick="delChat(event,'${c.id}')" title="Delete">&#10005;</button>
   </div>`;
 }
-function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c)return;cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
+function loadChat(id){const c=gChats().find(x=>x.id===id);if(!c){console.warn('[Void] Chat not found:',id);toast('Conversation not found — it may have been deleted.','error');renderHist();return;}cid=id;msgs=c.messages||[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='none';msgs.forEach((m,i)=>renderM(m.role,m.content,m.cls,i));renderHist();setTimeout(()=>document.getElementById('mw').scrollTop=99999,80);}
 function delChat(e,id){e.stopPropagation();sChats(gChats().filter(c=>c.id!==id));if(cid===id)newChat();else renderHist();}
 function newChat(){cid='c_'+Date.now();msgs=[];document.getElementById('mc').innerHTML='';document.getElementById('emp').style.display='flex';renderHist();}
 
@@ -1605,7 +1608,7 @@ function md(text){
   }
   return h;
 }
-function cpCode(id){const el=document.getElementById(id);if(el)navigator.clipboard.writeText(el.textContent).then(()=>toast('Copied to clipboard','success'));}
+function cpCode(id){const el=document.getElementById(id);if(el)navigator.clipboard.writeText(el.textContent).then(()=>toast('Copied to clipboard','success')).catch(e=>{console.warn('[Void] Clipboard write failed:',e);toast('Failed to copy — try selecting manually','error');});}
 
 // Render
 function renderM(role,content,cls,msgIdx){
@@ -1737,7 +1740,7 @@ function showTyping(){
 function rmT(){const e=document.getElementById('tr');if(e)e.remove();}
 function playSound(){
   if(!prefs.sound)return;
-  try{const ctx=new AudioContext();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(520,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(380,ctx.currentTime+0.25);g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);o.start();o.stop(ctx.currentTime+0.3);}catch{}
+  try{const ctx=new AudioContext();const o=ctx.createOscillator();const g=ctx.createGain();o.connect(g);g.connect(ctx.destination);o.frequency.setValueAtTime(520,ctx.currentTime);o.frequency.exponentialRampToValueAtTime(380,ctx.currentTime+0.25);g.gain.setValueAtTime(0.08,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+0.3);o.start();o.stop(ctx.currentTime+0.3);}catch(e){console.warn('[Void] Audio playback failed:',e)}
 }
 function buildSys(){
   const styles={balanced:'Be warm, accurate, and concise.',concise:'Be extremely brief — one or two short paragraphs max.',detailed:'Be thorough, comprehensive, and well-structured in your answers.',friendly:'Be conversational, encouraging, and upbeat.'};
@@ -1771,11 +1774,12 @@ async function callAI(history,text){
       })
     });
   }catch(e){
-    throw new Error('FETCH_FAIL');
+    console.error('[Void] Network request failed:',e);
+    throw new Error('FETCH_FAIL: '+(e.message||'unknown network error'));
   }
 
   let data;
-  try{data=await res.json();}catch(e){throw new Error('PARSE_FAIL');}
+  try{data=await res.json();}catch(e){console.error('[Void] Response parse failed:',e);throw new Error('PARSE_FAIL: '+(e.message||'invalid JSON'));}
 
   if(!res.ok){
     const m=data?.error?.message||'';
@@ -1816,16 +1820,14 @@ async function send(ov){
       m='API key rejected. Make sure you copied the full key from console.groq.com → API Keys. It should start with gsk_...';
     }else if(err.message==='RATE_LIMIT'){
       m='Rate limit hit. Wait 60 seconds and try again — Groq free tier has generous limits.';
-    }else if(err.message&&err.message.includes('fetch')){
-      m='Network error — could not reach Groq. Check your internet connection and try again.';
-    }else if(err.message==='FETCH_FAIL'){
+    }else if(err.message&&err.message.startsWith('FETCH_FAIL')){
       m='Could not connect to Groq. Check your internet connection.';
-    }else if(err.message==='PARSE_FAIL'){
+    }else if(err.message&&err.message.startsWith('PARSE_FAIL')){
       m='Got an unexpected response from Groq. Please try again.';
     }else{
       m=`Something went wrong: ${err.message}`;
     }
-    msgs.push({role:'assistant',content:m});renderM('assistant',m,'err',msgs.length-1);
+    msgs.push({role:'assistant',content:m});renderM('assistant',m,'err',msgs.length-1);saveChat();
   }finally{busy=false;}
 }
 function go(t){send(t)}
